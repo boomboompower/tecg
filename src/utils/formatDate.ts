@@ -1,5 +1,5 @@
 
-export function formatDate(date: string) {
+export function formatDate(date: string | number) {
     if (!date) return 'Unknown';
     try {
         const options: Intl.DateTimeFormatOptions = {
@@ -19,5 +19,15 @@ export function formatDate(date: string) {
     } catch (e) {
         console.error('Error formatting date:', e);
     }
-    return date;
+    return String(date);
+}
+
+export function formatCompactTimestamp(fullTimestamp: string | number): string {
+    const date = new Date(fullTimestamp);
+    const yyyy = date.getUTCFullYear();
+    const mm = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(date.getUTCDate()).padStart(2, '0');
+    const hh = String(date.getUTCHours()).padStart(2, '0');
+    const mi = String(date.getUTCMinutes()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd} ${hh}:${mi} UTC`;
 }

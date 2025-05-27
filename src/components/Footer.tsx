@@ -1,4 +1,6 @@
 import {Alert} from './Alert';
+import { CodeBracketSquareIcon } from '@heroicons/react/24/solid';
+import {useActionBar} from '../contexts/ActionBarDialogProvider';
 
 /**
  * We are using this component to display the footer of the page.
@@ -7,11 +9,21 @@ import {Alert} from './Alert';
  * Mostly, this is also for SEO purposes.
  */
 export function Footer() {
+    const { openDebugDialog } = useActionBar();
+
     return (
             <footer className="bg-gray-900 text-gray-400 py-8 px-4 mt-4 md:px-16 text-xs md:text-base">
             <div className="max-w-7xl mx-auto">
                 <div className="space-y-4">
-                    <h2 className="text-2xl font-bold text-white">About TECG - Stream Service Experiment Cookie Generator</h2>
+                    <h2 className="flex items-baseline gap-2 text-2xl font-bold text-white">
+                        <span>About TECG - Stream Service Experiment Cookie Generator</span>
+                        <span className="text-gray-500 hover:text-gray-300 cursor-pointer" title="Debug">
+                            <span className="sr-only">Debug</span>
+                            <button onClick={() => openDebugDialog() } className="align-middle" >
+                                <CodeBracketSquareIcon className={'w-5 h-5 size-5'} />
+                            </button>
+                        </span>
+                    </h2>
                     <p>TECG is an open-source tool designed for developers and enthusiasts who want to explore
                         experimental features in their favorite streaming platforms. It allows users to generate and
                         manage custom cookies, potentially activating unreleased updates or testing new features that

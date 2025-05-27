@@ -18,7 +18,7 @@ export function HomePage() {
                     </h1>
                 </header>
 
-                <Alert className='my-3 hidden lg:block'>
+                <Alert className='my-3 hidden lg:block' dismissible>
                     <p className='font-semibold'>Important Notice:</p>
                     <p>Some experimental features may violate platform policies. Misuse could result in account
                         suspensions or other penalties. ️</p>

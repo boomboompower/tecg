@@ -5,6 +5,22 @@ import {useExperiments} from '../hooks/useExperiments';
 import {convertOverridesToCookie} from '../utils/convertOverridesToCookie';
 import {convertCookieToOverrides} from '../utils/convertCookieToOverrides';
 
+import latestBuildRaw from '../data/latest_build.json';
+const latestBuild: LatestBuild = latestBuildRaw as unknown as LatestBuild;
+
+type LatestBuild = {
+    buildId: string;
+    updatedAt: string;
+    experimentsCount: number;
+    shorthand: {
+        added: number;
+        removed: number;
+        activated: number;
+        deactivated: number;
+    };
+    comments: string[];
+}
+
 type DialogContent = {
     title: string;
     description?: string;
@@ -15,6 +31,7 @@ interface ActionBarContextProps {
     openImportDialog: () => void;
     openExportDialog: () => void;
     openResetDialog: () => void;
+    openDebugDialog?: () => void;
     closeDialog: () => void;
     isDialogOpen: boolean;
     dialogContent: DialogContent | null;
@@ -155,6 +172,49 @@ export const ActionBarDialogProvider: React.FC<{ children: React.ReactNode }> = 
         setIsDialogOpen(true);
     };
 
+    const openDebugDialog = () => {
+        setDialogContent({
+            content: (
+                <div>
+                    <p className="text-sm text-gray-400">
+                        Build ID: <span className="text-white">{latestBuild.buildId}</span>
+                    </p>
+                    <p className="text-sm text-gray-400">
+                        Updated At: <span className="text-white">{latestBuild.updatedAt}</span>
+                    </p>
+                    <p className="text-sm text-gray-400">
+                        Total Experiments: <span className="text-white">{latestBuild.experimentsCount}</span>
+                    </p>
+                    <p className="text-sm text-gray-400">
+                        Changes in last build:
+                        <ul className="list-disc list-inside mt-2">
+                            <li>Added: <span className="text-white">{latestBuild.shorthand.added}</span></li>
+                            <li>Removed: <span className="text-white">{latestBuild.shorthand.removed}</span></li>
+                            <li>Activated: <span className="text-white">{latestBuild.shorthand.activated}</span></li>
+                            <li>Deactivated: <span className="text-white">{latestBuild.shorthand.deactivated}</span></li>
+                        </ul>
+                    </p>
+                    <p className="text-sm text-gray-400 mt-2">
+                        Comments:
+                        <ul className="list-disc list-inside mt-2">
+                            {latestBuild.comments.map((comment, index) => (
+                                <li key={index} className="text-white">{comment}</li>
+                            ))}
+                        </ul>
+                    </p>
+                    <Button
+                        className={'mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 float-end'}
+                        onClick={closeDialog}
+                    >
+                        Close
+                    </Button>
+                </div>
+            ),
+            title: 'Build Information',
+        });
+        setIsDialogOpen(true);
+    }
+
     const closeDialog = () => {
         setIsDialogOpen(false);
     };
@@ -165,6 +225,7 @@ export const ActionBarDialogProvider: React.FC<{ children: React.ReactNode }> = 
                 openImportDialog,
                 openExportDialog,
                 openResetDialog,
+                openDebugDialog,
                 closeDialog,
                 isDialogOpen,
                 dialogContent,

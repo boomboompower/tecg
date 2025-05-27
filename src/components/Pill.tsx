@@ -1,7 +1,8 @@
 interface PillProps {
     label: string;
     className?: string;
-    type?: 'default' | 'staff';
+    title?: string;
+    type?: 'default' | 'staff' | 'none';
 }
 
 /**
@@ -9,17 +10,20 @@ interface PillProps {
  *
  * @param label string - The label to display
  * @param className string - Additional class names to apply to the pill
+ * @param title string - The title attribute for the pill
+ * @param type 'default' | 'staff' - The type of pill, which determines the background color
  */
-export function Pill({ label, className }: PillProps) {
+export function Pill({ label, title, type, className }: PillProps) {
     return (
         <span
+            title={title}
             className={`inline-block rounded-full ${
-                label === 'Staff Default'
+                type === 'staff'
                     ? 'bg-yellow-600'
-                    : label === 'Default'
-                    ? 'bg-blue-600'
-                    : 'bg-black/20'
-            } mx-2 px-2 py-1 text-xs font-medium text-white transition ${className || ''}`}
+                    : type === 'none'
+                    ? 'bg-black/20'
+                    : 'bg-blue-600'
+            } ml-2 px-2 py-1 text-xs font-medium text-white transition ${className || ''}`}
         >
             {label}
         </span>

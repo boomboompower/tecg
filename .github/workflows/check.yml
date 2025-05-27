@@ -19,31 +19,16 @@ jobs:
           node-version: 16.x
           cache: npm
 
-      - name: Restore Cached Versions
-        id: cache-version-restore
-        uses: actions/cache/restore@v3
-        with:
-          path: |
-            docs/time.txt
-            docs/version.txt
-          key: ${{ runner.os }}-versions-${{ hashFiles('**/settings.js', '**/production.js') }}
-
       - run: npm install
       - run: npm run start --if-present
         env:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
 
       - name: Read Version
-        id: version
+        id: commit
         uses: juliangruber/read-file-action@v1
         with:
-          path: ./docs/version.txt
-
-      - name: Read Release Time
-        id: time
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./docs/time.txt
+          path: ./src/data/commit.txt
 
       - name: Commit Version
         shell: bash
@@ -53,22 +38,12 @@ jobs:
           git add docs/settings.js
           git add docs/production.js
           if [ "${{ github.event.inputs.message }}" == "" ]; then
-            git commit -m "${{ steps.time.outputs.content }} - New Build ${{ steps.version.outputs.content }}"
+            git commit -m "${{ steps.time.outputs.commit }}"
           else
             git commit -m "${{ github.event.inputs.message }}"
           fi
           git push
         continue-on-error: true
-
-      - name: Save Versions to Cache
-        if: success() || failure()
-        id: cache-versions-save
-        uses: actions/cache/save@v3
-        with:
-          path: |
-            docs/time.txt
-            docs/version.txt
-          key: ${{ runner.os }}-versions-${{ hashFiles('**/settings.js', '**/production.js') }}
 
       - name: Done
         run: |

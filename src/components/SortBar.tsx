@@ -1,8 +1,16 @@
 import {Field, Label, Select} from '@headlessui/react';
 import {SortByType, useSortBar} from '../contexts/SortBarProvider';
 
-export function SortBar() {
+export function SortBar({totalCount}: { totalCount: number }) {
     const { setSortBy } = useSortBar();
+
+    if (totalCount === 0) {
+        return (
+            <Field className="flex items-center gap-2 mb-2 mt-2 w-full lg:w-auto lg:mb-0 lg:mt-0">
+                <Label htmlFor="sort" className="block w-full text-sm/6 font-semibold text-gray-200">No experiments to sort</Label>
+            </Field>
+        );
+    }
 
     return (
         <Field className="flex items-center gap-2 mb-2 mt-2 w-full lg:w-auto lg:mb-0 lg:mt-0">

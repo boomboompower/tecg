@@ -1,5 +1,5 @@
 import '../index.css';
-import {Footer} from "./Footer";
+import {Footer} from './Footer';
 
 export function NotFound() {
     return (

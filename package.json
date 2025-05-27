@@ -4,11 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "react": "react-scripts start",
-    "build": "tsc ./src/downloader.ts --outDir dist && node ./dist/downloader.js",
-    "buildsite": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "dev": "react-scripts start",
+    "build": "tsc ./src/downloader.ts ./src/types/downloader.d.ts --outDir dist --declaration && node ./dist/downloader.js",
+    "build-step-2": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
+    "build-step-3": "sh -c 'read -p \"Enter commit message: \" msg && gh-pages -d build -m \"$msg\"'",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "eslint-fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "package-update": "npm install"
@@ -16,8 +15,10 @@
   "dependencies": {
     "@headlessui/react": "^2.2.2",
     "@heroicons/react": "^2.2.0",
+    "@popperjs/core": "^2.11.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-popper": "^2.3.0",
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
@@ -26,6 +27,7 @@
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "autoprefixer": "^10.4.21",
+    "colorette": "^2.0.20",
     "eslint": "^8.14.0",
     "gh-pages": "^6.3.0",
     "tailwindcss": "^3.4.17",

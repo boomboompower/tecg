@@ -49,26 +49,27 @@ export function TabGroup() {
     const totalExperiments = activeExperiments.length + servingOneExperiments.length + unregisteredExperiments.length;
 
     const tabData = [
-        { name: 'Active', count: activeExperiments.length },
-        { name: 'Serving One', count: servingOneExperiments.length },
-        { name: 'Unregistered', count: unregisteredExperiments.length },
+        { name: 'Active', count: activeExperiments.length, description: 'Experiments currently active in production' },
+        { name: 'Serving One', count: servingOneExperiments.length, description: 'Experiments currently only only serving one group. Every user has the same experiment' },
+        { name: 'Unregistered', count: unregisteredExperiments.length, description: 'Experiments not registered in production and not being served to any user' },
     ];
 
     return (
         <HeadlessTabGroup selectedIndex={selectedIndex} onChange={(index) => {
             setSelectedIndex(index);
         }}>
-            <SortBar />
+            <SortBar totalCount={totalExperiments} />
 
             <ExperimentPercentage unusedCount={unusedCount} totalCount={totalExperiments} />
 
             {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
             {/* @ts-ignore tablist is a valid role. */}
             <TabList className="lg:flex gap-4 grid grid-cols-3" aria-label="Experiment tabs" role="tablist">
-                {tabData.map(({name, count}, index) => (
+                {totalExperiments > 0 && tabData.map(({name, count, description}, index) => (
                     <Tab
                         key={name}
                         aria-label={`Select ${name} experiments`}
+                        title={description}
                         className={`rounded-full px-3 py-1 text-sm font-semibold text-white ${selectedIndex === index ? 'bg-[#404955]' : 'bg-[#2a3441]'}`}
                     >
                         {name}<span className='text-xs'> ({count}/{totalExperiments})</span>
