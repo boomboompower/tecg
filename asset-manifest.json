@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.css": "/tecg/static/css/main.8e3a18b3.css",
-    "main.js": "/tecg/static/js/main.200bcf87.js",
-    "static/js/268.465fb7a7.chunk.js": "/tecg/static/js/268.465fb7a7.chunk.js",
+    "main.css": "/tecg/static/css/main.3f2e09ec.css",
+    "main.js": "/tecg/static/js/main.cb415ba3.js",
+    "static/js/268.dffbb592.chunk.js": "/tecg/static/js/268.dffbb592.chunk.js",
     "index.html": "/tecg/index.html"
   },
   "entrypoints": [
-    "static/css/main.8e3a18b3.css",
-    "static/js/main.200bcf87.js"
+    "static/css/main.3f2e09ec.css",
+    "static/js/main.cb415ba3.js"
   ]
 }
