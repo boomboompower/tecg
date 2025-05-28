@@ -1,12 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { formatDate } from '../utils/formatDate';
 import { log } from '../utils/logger';
 import { publish } from 'gh-pages';
 
 const latestBuildJsonPath = './src/data/latest_build.json';
 const commitMsgPath = './src/data/commit.txt';
 let message = 'Default commit message';
-let jsonData: { buildId: string, updatedAt: string };
+let jsonData: { buildId: string, updatedAt: number };
 
 function formatDuration(milliseconds: number): string {
     // If it only has milliseconds, return it as is with 'ms' suffix
@@ -24,20 +25,19 @@ function formatDuration(milliseconds: number): string {
 }
 
 async function buildPage() {
-
     try {
         const data = readFileSync(latestBuildJsonPath, 'utf8');
         jsonData = JSON.parse(data);
     } catch (err: unknown) {
-        jsonData = { buildId: 'unknown', updatedAt: 'unknown' };
+        jsonData = { buildId: 'unknown', updatedAt: null };
     }
 
-// Clear the console for better readability
+    // Clear the console for better readability
     console.clear();
 
     log.info('Pushing to Github!');
     log.info(`  - Build ID: ${jsonData.buildId}`);
-    log.info(`  - Updated At: ${jsonData.updatedAt}`);
+    log.info(`  - Updated At: ${formatDate(jsonData.updatedAt, 'UTC')}`);
     log.raw()
 
     try {

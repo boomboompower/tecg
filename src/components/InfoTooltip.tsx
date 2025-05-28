@@ -1,7 +1,7 @@
-import { InformationCircleIcon, CheckIcon } from '@heroicons/react/20/solid';
-import {CollatedExperiment} from '../hooks/useExperiments';
-import {useDialogProvider} from '../contexts/DialogProvider';
-import {MouseEvent, useState} from 'react';
+import { InformationCircleIcon, CheckIcon, ClipboardIcon } from '@heroicons/react/20/solid';
+import { useDialogProvider } from '../contexts/DialogProvider';
+import { CollatedExperiment } from '../hooks/useExperiments';
+import { MouseEvent, useState } from 'react';
 
 interface InfoTooltipProps {
     experiment: CollatedExperiment;
@@ -35,14 +35,17 @@ function DataBlock({text}: {text: string}) {
     // Copied feedback should be a tick in the center of the block
 
     return (
-        <div className={`${isShowingCopyFeedback ? 'bg-gray-700' : 'bg-gray-600 cursor-pointer'} text-white p-2 rounded shadow-sm overflow-x-auto whitespace-pre-wrap transition`} onClick={handleCopy}>
+        <div className={`${isShowingCopyFeedback ? 'bg-gray-700' : 'bg-gray-600 cursor-pointer'} text-white relative p-2 rounded shadow-sm overflow-x-auto whitespace-pre-wrap transition`} onClick={handleCopy}>
             {isShowingCopyFeedback ? (
                 <div className="text-green-400 text-center">
                     <CheckIcon className="inline-block w-5 h-5" />
                     <div className="text-xs">Copied!</div>
                 </div>
             ) : (
-                <span>{text}</span>
+                <div>
+                    {text}
+                    <ClipboardIcon className="absolute top-2 right-2 w-3 h-3 text-gray-400" />
+                </div>
             )}
         </div>
     )
@@ -119,7 +122,7 @@ export function InfoTooltip({experiment, override, prettyName}: InfoTooltipProps
         });
     }
 
-    const iconClass = `ml-1 pt-0.5 w-4 h-4 transition-colors ${
+    const iconClass = `mr-1 pt-0.5 size-4 transition-colors ${
         override
             ? override === experiment.name
                 ? 'fill-yellow-500 hover:fill-yellow-400'

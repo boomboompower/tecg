@@ -31,7 +31,7 @@ type ShorthandData = {
 
 type StoredBuildData = {
     buildId: string;
-    updatedAt: string;
+    updatedAt: number;
     experimentsCount: number;
     shorthand: {
         added: number;

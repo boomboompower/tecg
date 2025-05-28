@@ -4,6 +4,7 @@ import { CodeBracketSquareIcon } from '@heroicons/react/24/solid';
 
 import { Alert } from './Alert';
 import { useDialogProvider } from '../contexts/DialogProvider';
+import { formatDate } from '../utils/formatDate';
 
 // The build information for the latest build
 import latestBuildRaw from '../data/latest_build.json';
@@ -11,7 +12,7 @@ const latestBuild: LatestBuild = latestBuildRaw as unknown as LatestBuild;
 
 type LatestBuild = {
     buildId: string;
-    updatedAt: string;
+    updatedAt: number;
     experimentsCount: number;
     shorthand: {
         added: number;
@@ -131,7 +132,7 @@ function DebugDialog() {
                 Build ID: <span className="text-white">{latestBuild.buildId}</span>
             </p>
             <p className="text-sm text-gray-400">
-                Updated At: <span className="text-white">{latestBuild.updatedAt}</span>
+                Updated At: <span className="text-white">{formatDate(latestBuild.updatedAt)}</span>
             </p>
             <p className="text-sm text-gray-400">
                 Total Experiments: <span className="text-white">{latestBuild.experimentsCount}</span>

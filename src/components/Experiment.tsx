@@ -54,12 +54,12 @@ export function Experiment({ experiment, isLuckyLast }: ExperimentProps) {
                     <DisclosureButton className="gap-5 text-left group grid grid-cols-4 w-full items-center justify-end">
                         <div className="col-span-3 w-full text-lg font-semibold text-white p-3 justify-self-start">
                             <div>
-                                <span>{prettyName}</span>
                                 <InfoTooltip
                                     experiment={experiment}
                                     override={overrides[experiment.name]}
                                     prettyName={prettyName}
                                 />
+                                <span>{prettyName}</span>
                             </div>
                             <div className="mt-1 text-xs text-gray-500">
                                 <div>{experimentDateText}</div>

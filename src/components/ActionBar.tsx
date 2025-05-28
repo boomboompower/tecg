@@ -44,14 +44,14 @@ export function ActionBar() {
                 aria-label={'Import an override from clipboard'}
                 title={'Import overrides from clipboard. This will paste the overrides from your clipboard.'}
                 onClick={openImportDialog}
-                className={'w-full bg-tw text-white text-sm font-semibold py-1 px-3 rounded-md transition'}>
+                className={'w-full bg-tw text-white text-sm font-semibold py-1 px-3 rounded-md transition disabled:text-white/50'}>
                 Import
             </Button>
             <Button
                 aria-label={'Export overrides to clipboard'}
                 title={'Export overrides to clipboard. This will copy the current overrides to your clipboard.'}
                 onClick={openExportDialog}
-                className="w-full bg-export text-white text-sm font-semibold py-1 px-3 rounded-md transition">
+                className="w-full bg-export text-white text-sm font-semibold py-1 px-3 rounded-md transition disabled:text-white/50">
                 Export
             </Button>
             <Button
@@ -79,7 +79,7 @@ function ImportDialog() {
                 id={'cookie-input'}
             />
             <Button
-                className="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-md"
+                className="mt-3 w-full bg-blue text-white px-4 py-2 rounded-md"
                 onClick={(event) => {
                     const input = document.getElementById('cookie-input') as HTMLTextAreaElement;
                     const cookie = input.value;
@@ -131,7 +131,7 @@ function ExportDialog({ closeDialog }: { closeDialog: () => void }) {
                 value={cookie}
             />
             <Button
-                className="w-full mt-3 bg-green-500 text-white px-4 py-2 rounded-md"
+                className="w-full mt-3 bg-blue text-white px-4 py-2 rounded-md"
                 onClick={(event) => {
                     navigator.clipboard.writeText(cookie).then(() => {
                         console.log('Copied to clipboard');
@@ -154,16 +154,36 @@ function ExportDialog({ closeDialog }: { closeDialog: () => void }) {
 
 function ResetDialog() {
     const {closeDialog} = useDialogProvider();
-    const {clearOverrides} = useExperimentOverrides();
+    const {clearOverrides, overrides} = useExperimentOverrides();
+
+    // We only need the keys of the overrides to display
+    const overrideKeys = Object.keys(overrides);
 
     return (
         <div>
-            <p className="text-white">Are you sure you want to reset all overrides? This will remove all your custom settings.</p>
+            <p className="text-sm text-gray-400">
+                Are you sure you want to reset all overrides? This action cannot be undone.
+            </p>
+            {overrideKeys.length > 0 && (
+                <ul className="mt-2 list-disc list-inside text-gray-300">
+                    {overrideKeys.map((experiment) => (
+                        <li key={experiment}>{experiment}</li>
+                    ))}
+                </ul>
+            )}
             <Button
-                className="mt-3 w-full bg-red-500 text-white px-4 py-2 rounded-md"
-                onClick={() => {
+                className={'mt-3 w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 float-end'}
+                onClick={(e) => {
                     clearOverrides();
-                    closeDialog();
+
+                    // Update the text to a tick icon or similar
+                    e.currentTarget.innerText = '✓';
+                    e.currentTarget.setAttribute('disabled', 'true');
+                    e.currentTarget.style.pointerEvents = 'none';
+
+                    setTimeout(() => {
+                        closeDialog();
+                    }, 1000);
                 }}
             >
                 Reset Overrides

@@ -1,13 +1,30 @@
-
-export function formatDate(date: string | number) {
+/**
+ * Format a date into a human-readable string. By default, it uses the local timezone.
+ * If a timezone is provided, it will format the date accordingly. (Using en-GB locale)
+ *
+ * @param date string | number - The date to format, can be a string or a number (timestamp).
+ * @param timezone string | undefined - The timezone to use for formatting, if provided it will format the date in that timezone.
+ *                                      However, if this is set the locale will be set to 'en-GB' to ensure consistent formatting.
+ *
+ * @return string - The formatted date string, or 'Unknown' if the date is falsy.
+ */
+export function formatDate(date: string | number, timezone: string | undefined = undefined): string {
     if (!date) return 'Unknown';
+
     try {
         const options: Intl.DateTimeFormatOptions = {
-            dateStyle: 'long',
-            timeStyle: 'short',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
             hour12: true,
-            timeZone: 'UTC',
+            timeZoneName: 'short'
         };
+
+        // If a timezone is provided, use it, or else we want to use the local timezone
+        if (timezone) options.timeZone = timezone;
+
         const formattedDate = new Date(date)
 
         // Experiments found before we started tracking them
@@ -22,6 +39,12 @@ export function formatDate(date: string | number) {
     return String(date);
 }
 
+/**
+ * Formats a timestamp into a compact string representation.
+ *
+ * @param fullTimestamp string | number - The full timestamp to format, can be a string or a number.
+ * @return string - The formatted timestamp in the format "YYYY-MM-DD HH:MM UTC".
+ */
 export function formatCompactTimestamp(fullTimestamp: string | number): string {
     const date = new Date(fullTimestamp);
     const yyyy = date.getUTCFullYear();

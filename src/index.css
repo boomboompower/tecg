@@ -42,6 +42,16 @@
   background: #6b2fbb;
 }
 
+.bg-blue {
+  background: #2563eb;
+}
+.bg-blue:not([disabled]):hover {
+  background: #1d4ed8;
+}
+.bg-blue[disabled] {
+  background: #1e40af;
+}
+
 .stack {
   background: rgb(42, 52, 65);
 }

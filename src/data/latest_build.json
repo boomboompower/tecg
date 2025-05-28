@@ -1,14 +1,24 @@
 {
-  "buildId": "caa37a27-4522-4738-8112-2cb122a77da6",
-  "updatedAt": "27 May 2025 at 03:34 am",
-  "experimentsCount": 239,
+  "buildId": "0c4008bd-1550-4b3d-ba60-3b0dcdadec46",
+  "updatedAt": 1748449036570,
+  "experimentsCount": 240,
   "shorthand": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 1,
     "activated": 0,
     "deactivated": 0
   },
   "comments": [
-    "No changes detected in experiments."
+    "2 experiments were added, 1 experiments were removed.",
+    "Added experiments:",
+    "- df24c2db-dc5a-40c9-8508-1c65fbc4ca7c (ivs_web_edge_prewarm_v2)",
+    "  * control (100)",
+    "  * treatment (0)",
+    "- 7eeaa98b-d18e-41ec-bac5-0d6eb9b8aec2 (supply-leapfrog)",
+    "  * control (100)",
+    "Removed experiments:",
+    "- ad505384-e920-4fbc-b497-662840867998 (web_ivs_player_scip_probe)",
+    "  * control (100)",
+    "  * treatment (0)"
   ]
 }

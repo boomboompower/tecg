@@ -69,11 +69,11 @@ async function fetchLatestBuild(): Promise<BuildInfo | null> {
     }
 }
 
-function hasNewBuild(newestBuild: string, newestTime: string, storedData: StoredBuildData): boolean {
+function hasNewBuild(newestBuild: string, newestTime: number, storedData: StoredBuildData): boolean {
     if (!storedData) return true;
 
     const prevBuild = storedData.buildId.trim();
-    const prevUpdatedAt = storedData.updatedAt.trim();
+    const prevUpdatedAt = storedData.updatedAt;
 
     // If the build ID is different, we have a new build
     if (prevBuild !== newestBuild.trim()) {
@@ -83,7 +83,7 @@ function hasNewBuild(newestBuild: string, newestTime: string, storedData: Stored
 
     // If the updated timestamp is different, we have a new build
     if (prevUpdatedAt !== newestTime) {
-        log.info(`New update detected: ${prevUpdatedAt} -> ${newestTime}`);
+        log.info(`New update detected: ${formatDate(prevUpdatedAt, 'UTC')} -> ${formatDate(newestTime, 'UTC')}`);
         return true;
     }
 
@@ -117,10 +117,11 @@ function hasNewBuild(newestBuild: string, newestTime: string, storedData: Stored
     }
 
     const previousBuildInfo = getPreviousBuildInfo();
-    const updatedAt = formatDate(buildInfo.updated);
+    const updateTime = buildInfo.updated;
+    const updatedAt = formatDate(updateTime, 'UTC');
 
     // Check if the latest build is already stored, if so, we can skip the rest of the process
-    if (!hasNewBuild(buildInfo.releases[0].buildId, updatedAt, previousBuildInfo)) {
+    if (!hasNewBuild(buildInfo.releases[0].buildId, updateTime, previousBuildInfo)) {
         log.warn('No new build found - Build version remains unchanged.')
 
         return;
@@ -153,7 +154,7 @@ function hasNewBuild(newestBuild: string, newestTime: string, storedData: Stored
     if (!buildData || !buildData.shorthand || !buildData.comments) {
         buildData = {
             comments: ['Failed to fetch build data, using defaults'],
-            shorthand: { added: 0, removed: 0, activated: 0, deactivated: 0},
+            shorthand: {added: 0, removed: 0, activated: 0, deactivated: 0},
             buildVersion: buildInfo.releases[0].buildId
         }
     }
@@ -175,9 +176,9 @@ function hasNewBuild(newestBuild: string, newestTime: string, storedData: Stored
     ].join('\n'), {encoding: 'utf8'});
 
     // Write the latest build information to a JSON file for React to use
-    const latestBuildData = {
+    const latestBuildData: StoredBuildData = {
         buildId: buildInfo.releases[0].buildId,
-        updatedAt: updatedAt,
+        updatedAt: updateTime,
         experimentsCount: experiments.length,
         shorthand: buildData.shorthand,
         comments: buildData.comments
