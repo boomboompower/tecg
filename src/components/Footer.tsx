@@ -1,6 +1,26 @@
-import {Alert} from './Alert';
+import React, {useMemo} from 'react';
+import { Button } from '@headlessui/react';
 import { CodeBracketSquareIcon } from '@heroicons/react/24/solid';
-import {useActionBar} from '../contexts/ActionBarDialogProvider';
+
+import { Alert } from './Alert';
+import { useDialogProvider } from '../contexts/DialogProvider';
+
+// The build information for the latest build
+import latestBuildRaw from '../data/latest_build.json';
+const latestBuild: LatestBuild = latestBuildRaw as unknown as LatestBuild;
+
+type LatestBuild = {
+    buildId: string;
+    updatedAt: string;
+    experimentsCount: number;
+    shorthand: {
+        added: number;
+        removed: number;
+        activated: number;
+        deactivated: number;
+    };
+    comments: string[];
+}
 
 /**
  * We are using this component to display the footer of the page.
@@ -9,7 +29,14 @@ import {useActionBar} from '../contexts/ActionBarDialogProvider';
  * Mostly, this is also for SEO purposes.
  */
 export function Footer() {
-    const { openDebugDialog } = useActionBar();
+    const { openDialogue } = useDialogProvider();
+
+    const openDebugDialog = () => {
+        openDialogue({
+            content: <DebugDialog />,
+            title: 'Debug Information',
+        });
+    }
 
     return (
             <footer className="bg-gray-900 text-gray-400 py-8 px-4 mt-4 md:px-16 text-xs md:text-base">
@@ -66,3 +93,76 @@ export function Footer() {
         </footer>
     );
 }
+
+function DebugDialog() {
+    const {closeDialog} = useDialogProvider();
+
+    const coloredComments = useMemo(() => {
+        let currentGroup: 'none' | 'added' | 'unadded' = 'none';
+
+        return latestBuild.comments.map((line, index) => {
+            const lowerLine = line.toLowerCase();
+
+            // Simple logic to determine the current group based on the line content
+            if (lowerLine.includes('unadded experiments')) {
+                currentGroup = 'unadded';
+            } else if (lowerLine.includes('added experiments')) {
+                currentGroup = 'added';
+            } else if (line.trim() === '') {
+                currentGroup = 'none';
+            }
+
+            // In the future, this should be done in the backend itself.
+            // I know that the backend is written for optimization, not for readability. But it's
+            // still a good idea to replace how we generate the data in the future.
+            line = line.replace(/\bUnadded\b/g, 'Removed').replace(/\bunadded\b/g, 'removed');
+
+            // Determine the color class based on the current group
+            let colorClass = 'text-white';
+            if (currentGroup === 'added') colorClass = 'text-green-400';
+            else if (currentGroup === 'unadded') colorClass = 'text-red-400';
+
+            return (
+                <div key={index} className={colorClass}>
+                    {line}
+                </div>
+            );
+        });
+    }, [latestBuild.comments]);
+
+    return (
+        <div>
+            <p className="text-sm text-gray-400">
+                Build ID: <span className="text-white">{latestBuild.buildId}</span>
+            </p>
+            <p className="text-sm text-gray-400">
+                Updated At: <span className="text-white">{latestBuild.updatedAt}</span>
+            </p>
+            <p className="text-sm text-gray-400">
+                Total Experiments: <span className="text-white">{latestBuild.experimentsCount}</span>
+            </p>
+            <p className="text-sm text-gray-400">
+                Changes in last build:
+                <ul className="list-disc list-inside mt-2">
+                    <li>Added: <span className="text-white">{latestBuild.shorthand.added}</span></li>
+                    <li>Removed: <span className="text-white">{latestBuild.shorthand.removed}</span></li>
+                    <li>Activated: <span className="text-white">{latestBuild.shorthand.activated}</span></li>
+                    <li>Deactivated: <span className="text-white">{latestBuild.shorthand.deactivated}</span></li>
+                </ul>
+            </p>
+            <div className="text-sm text-gray-400 mt-2">
+                <pre className="bg-black/50 text-sm p-4 rounded-md whitespace-pre-wrap font-mono mt-2 overflow-x-auto">
+                    {coloredComments}
+                </pre>
+            </div>
+            <Button
+                className={'mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 float-end'}
+                onClick={closeDialog}
+            >
+                Close
+            </Button>
+        </div>
+    )
+}
+
+export default Footer;

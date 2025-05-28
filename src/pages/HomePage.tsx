@@ -1,7 +1,9 @@
-import {Alert} from '../components/Alert';
 import {TabGroup} from '../components/TabGroup';
-import {ActionBar} from '../components/ActionBar';
-import {Footer} from '../components/Footer';
+import {lazy} from 'react';
+
+const AlertLazy = lazy(() => import('../components/Alert'));
+const FooterLazy = lazy(() => import('../components/Footer'));
+const ActionBarLazy = lazy(() => import('../components/ActionBar'));
 
 // Want to see this on the actual website itself?
 // Execute this code on the console:
@@ -18,19 +20,19 @@ export function HomePage() {
                     </h1>
                 </header>
 
-                <Alert className='my-3 hidden lg:block' dismissible>
+                <AlertLazy className='my-3 hidden lg:block' dismissible>
                     <p className='font-semibold'>Important Notice:</p>
                     <p>Some experimental features may violate platform policies. Misuse could result in account
                         suspensions or other penalties. ️</p>
                     <p>&#128073; See the <a href='#warning' className='underline decoration-dotted'>warning
                         below</a> for more details.</p>
-                </Alert>
+                </AlertLazy>
 
                 <TabGroup />
 
-                <ActionBar />
+                <ActionBarLazy />
             </div>
-            <Footer/>
+            <FooterLazy />
         </div>
     );
 }

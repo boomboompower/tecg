@@ -3,7 +3,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { HolidaySeasons } from './components/HolidaySeasons';
 import { ExperimentOverridesProvider } from './contexts/ExperimentOverridesProvider';
-import { ActionBarDialogProvider } from './contexts/ActionBarDialogProvider';
+import { DialogProvider } from './contexts/DialogProvider';
 import { SortBarProvider } from './contexts/SortBarProvider';
 import { HomePage } from './pages/HomePage';
 import { PageNotFound } from './pages/PageNotFound';
@@ -14,11 +14,11 @@ function App() : React.ReactElement  {
         <HolidaySeasons>
             <PageNotFound>
                 <ExperimentOverridesProvider>
-                    <ActionBarDialogProvider>
-                        <SortBarProvider>
+                    <SortBarProvider>
+                        <DialogProvider>
                             <HomePage/>
-                        </SortBarProvider>
-                    </ActionBarDialogProvider>
+                        </DialogProvider>
+                    </SortBarProvider>
                 </ExperimentOverridesProvider>
             </PageNotFound>
         </HolidaySeasons>

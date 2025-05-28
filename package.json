@@ -5,9 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "react-scripts start",
-    "build": "tsc ./src/downloader.ts ./src/types/downloader.d.ts --outDir dist --declaration && node ./dist/downloader.js",
+    "build": "tsc ./src/scripts/downloader.ts ./src/types/downloader.d.ts ./src/scripts/build-gh-pages.ts --outDir dist --declaration && node ./dist/scripts/downloader.js",
     "build-step-2": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
-    "build-step-3": "sh -c 'read -p \"Enter commit message: \" msg && gh-pages -d build -m \"$msg\"'",
+    "build-step-3": "node ./dist/scripts/build-gh-pages.js",
+    "build-step-3-extended": "tsc ./src/scripts/build-gh-pages.ts --outDir dist && node ./dist/scripts/build-gh-pages.js",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "eslint-fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "package-update": "npm install"
@@ -18,10 +19,10 @@
     "@popperjs/core": "^2.11.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-popper": "^2.3.0",
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
+    "@types/gh-pages": "^6.1.0",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@typescript-eslint/eslint-plugin": "^5.22.0",

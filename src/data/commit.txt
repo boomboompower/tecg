@@ -1,3 +1,14 @@
-build: 2025-05-27 03:34 UTC | +0/-0 exp, +0/-0 active
+build: 2025-05-28 00:42 UTC | +2/-1 exp, +0/-0 active
 
-No changes detected in experiments.
+
+2 experiments were added, 1 experiments were unadded.
+Added experiments:
+- df24c2db-dc5a-40c9-8508-1c65fbc4ca7c (ivs_web_edge_prewarm_v2)
+  * control (100)
+  * treatment (0)
+- 7eeaa98b-d18e-41ec-bac5-0d6eb9b8aec2 (supply-leapfrog)
+  * control (100)
+Unadded experiments:
+- ad505384-e920-4fbc-b497-662840867998 (web_ivs_player_scip_probe)
+  * control (100)
+  * treatment (0)

@@ -60,3 +60,5 @@ export function Alert({children, id, className, dismissible}: AlertProps) {
         </div>
     );
 }
+
+export default Alert;

@@ -1,6 +1,3 @@
-type LatestBuild = {
-    channels: BuildInfo[]
-}
 
 type ReleaseInfo = {
     buildId: string,            // The random ID of this build

@@ -1,6 +1,6 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-
+import { useMemo } from 'react';
 
 // Components
 import {ExperimentOverrides} from './ExperimentOverrides';
@@ -8,11 +8,11 @@ import {InfoTooltip} from './InfoTooltip';
 
 // Hooks
 import {useExperimentOverrides} from '../contexts/ExperimentOverridesProvider';
+import {CollatedExperiment } from '../hooks/useExperiments';
 
 // Utility functions
 import {prettifyName} from '../utils/prettifyName';
 import {formatDate} from '../utils/formatDate';
-import {CollatedExperiment } from '../hooks/useExperiments';
 
 interface ExperimentProps {
     experiment: CollatedExperiment;
@@ -39,11 +39,13 @@ function getExperimentDateText(experiment: CollatedExperiment) {
  * - the date it was found,
  * - a pill indicating if the experiment has been overridden.
  *
- * @param {CollatedExperiment[]} experiment experiment - The experiment to display
- * @param {boolean} isLuckyLast - Whether the experiment is a lucky last experiment
+ * @param experiment {@link CollatedExperiment} experiment - The experiment to display
+ * @param isLuckyLast {boolean} - Whether the experiment is a lucky last experiment
  */
 export function Experiment({ experiment, isLuckyLast }: ExperimentProps) {
     const { overrides } = useExperimentOverrides();
+    const prettyName = useMemo(() => prettifyName(experiment.name), [experiment.name]);
+    const experimentDateText = useMemo(() => getExperimentDateText(experiment), [experiment]);
 
     return (
         <Disclosure as="div" key={experiment.name}>
@@ -52,14 +54,15 @@ export function Experiment({ experiment, isLuckyLast }: ExperimentProps) {
                     <DisclosureButton className="gap-5 text-left group grid grid-cols-4 w-full items-center justify-end">
                         <div className="col-span-3 w-full text-lg font-semibold text-white p-3 justify-self-start">
                             <div>
-                                <span>{prettifyName(experiment.name)}</span>
+                                <span>{prettyName}</span>
                                 <InfoTooltip
                                     experiment={experiment}
                                     override={overrides[experiment.name]}
+                                    prettyName={prettyName}
                                 />
                             </div>
                             <div className="mt-1 text-xs text-gray-500">
-                                <div>{getExperimentDateText(experiment)}</div>
+                                <div>{experimentDateText}</div>
                             </div>
                         </div>
                         <div className='justify-self-end mr-2'>
