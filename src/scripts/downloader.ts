@@ -35,51 +35,6 @@ function constructShorthandMessage(shorthandData: ShorthandData, updatedAt: numb
     return `build: ${compactTimestamp} | +${shorthandData.added}/-${shorthandData.removed} exp, +${shorthandData.activated}/-${shorthandData.deactivated} active`;
 }
 
-/**
- * Checks the delta between the current and previous experiments data, and builds a comment based on the changes.
- *
- * @param buildComments {string[]} the array to push the comments to, will be used for the commit message
- * @param current {@link ExperimentData[]} - The current experiments data
- * @param previous {@link ExperimentData[]} - The previous experiments data
- * @param options { filter?: (e: ExperimentData) => boolean, label: string } - Options to filter the experiments and the label to use for the comments
- */
-function checkExperimentDelta(buildComments: string[], current: ExperimentData[], previous: ExperimentData[], options: { filter?: (e: ExperimentData) => boolean, label: string }): { added: number, removed: number } {
-    const filter = options.filter ?? (() => true);
-    const currentFiltered = current.filter(filter);
-    const previousFiltered = previous.filter(filter);
-
-    const previousIds = new Set(previousFiltered.map(e => e.id));
-    const currentIds = new Set(currentFiltered.map(e => e.id));
-
-    const added = currentFiltered.filter(e => !previousIds.has(e.id));
-    const removed = previousFiltered.filter(e => !currentIds.has(e.id));
-
-    if (!added.length && !removed.length) {
-        return { added: 0, removed: 0 };
-    }
-
-    // General comment for this section
-    buildComments.push(`${added.length} experiments were ${options.label}ed, ${removed.length} experiments were un${options.label}ed.`);
-
-    if (added.length > 0) {
-        buildComments.push(`${options.label.charAt(0).toUpperCase() + options.label.slice(1)}ed experiments:`);
-        for (const e of added) {
-            buildComments.push(`- ${e.id} (${e.name})`);
-            e.groups.forEach(g => buildComments.push(`  * ${g.value} (${g.weight})`));
-        }
-    }
-
-    if (removed.length > 0) {
-        buildComments.push(`Un${options.label}ed experiments:`);
-        for (const e of removed) {
-            buildComments.push(`- ${e.id} (${e.name})`);
-            e.groups.forEach(g => buildComments.push(`  * ${g.value} (${g.weight})`));
-        }
-    }
-
-    return { added: added.length, removed: removed.length };
-}
-
 function getPreviousBuildInfo(): StoredBuildData | null {
     if (!existsSync(LATEST_BUILD_JSON)) return null;
 
@@ -140,9 +95,14 @@ function hasNewBuild(newestBuild: string, newestTime: string, storedData: Stored
 
     // Check if environment variable are set for downloading the data
     const prodExpURL = process.env.EXPERIMENTS_URL;
+    const prodExpDataURL = process.env.EXPERIMENTS_DATA_URL;
 
     if (!prodExpURL) {
         log.error('Cannot determine experiment source, EXPERIMENTS_URL are not set!');
+
+        return;
+    } else if (!prodExpDataURL) {
+        log.error('Cannot determine experiment data source, EXPERIMENTS_DATA_URL are not set!');
 
         return;
     }
@@ -166,20 +126,13 @@ function hasNewBuild(newestBuild: string, newestTime: string, storedData: Stored
         return;
     }
 
-    const previousData = existsSync(EXPERIMENTS_DATA) ? readFileSync(EXPERIMENTS_DATA, {encoding: 'utf8'}).trim() : '[]';
-    const parsedPreviousData = JSON.parse(previousData) as ExperimentData[];
-    // Track various comments for the build, will be used for the detailed commit message
-    const buildComments: string[] = [];
-    // Keeps track of the shorthand data for the commit message for the main commit message
-    const shorthandData: ShorthandData = { added: 0, removed: 0, activated: 0, deactivated: 0 }
-
     log.info(`New build detected ${buildInfo.releases[0].buildId} - Updated at ${updatedAt}`);
 
     // Download the new data from an environment variable
     const experiments: ExperimentData[] | null = await fetch(prodExpURL).then(async (o) => {
         return await o.json();
     }).catch((err) => {
-        log.error('Failed to fetch experiments data:', err);
+        log.error('Failed to fetch experiments:', err);
         return null;
     });
 
@@ -188,23 +141,26 @@ function hasNewBuild(newestBuild: string, newestTime: string, storedData: Stored
         return;
     }
 
-    // Observe the data against the previous data, make some comments
-    const { added, removed } = checkExperimentDelta(buildComments, experiments, parsedPreviousData, {
-        label: 'add'
-    });
-    const { added: activated, removed: deactivated } = checkExperimentDelta(buildComments, experiments, parsedPreviousData, {
-        label: 'activate',
-        filter: e => e.active
+    let buildData: RemoteBuildData | null = await fetch(prodExpDataURL).then(async (o) => {
+        return await o.json();
+    }).catch((err) => {
+        log.error('Failed to fetch experiments data:', err);
+        return null;
     });
 
-    shorthandData.added = added;
-    shorthandData.removed = removed;
-    shorthandData.activated = activated;
-    shorthandData.deactivated = deactivated;
+    // If the build data is not available, we will use default values
+    // This is not ideal, but it's better than failing the entire script
+    if (!buildData || !buildData.shorthand || !buildData.comments) {
+        buildData = {
+            comments: ['Failed to fetch build data, using defaults'],
+            shorthand: { added: 0, removed: 0, activated: 0, deactivated: 0},
+            buildVersion: buildInfo.releases[0].buildId
+        }
+    }
 
-    if (buildComments.length === 0) {
+    if (buildData.comments.length === 0) {
         log.warn('No changes detected in experiments data, nothing to update.');
-        buildComments.push('No changes detected in experiments.');
+        buildData.comments.push('No changes detected in experiments.');
     }
 
     // Write all our data to the files
@@ -212,10 +168,10 @@ function hasNewBuild(newestBuild: string, newestTime: string, storedData: Stored
 
     // Write the commit message we should use for the CI pipeline
     writeFileSync(COMMIT_MESSAGE, [
-        constructShorthandMessage(shorthandData, buildInfo.updated),
+        constructShorthandMessage(buildData.shorthand, buildInfo.updated),
         '',
         '',
-        ...buildComments
+        ...buildData.comments
     ].join('\n'), {encoding: 'utf8'});
 
     // Write the latest build information to a JSON file for React to use
@@ -223,8 +179,8 @@ function hasNewBuild(newestBuild: string, newestTime: string, storedData: Stored
         buildId: buildInfo.releases[0].buildId,
         updatedAt: updatedAt,
         experimentsCount: experiments.length,
-        shorthand: shorthandData,
-        comments: buildComments
+        shorthand: buildData.shorthand,
+        comments: buildData.comments
     };
     writeFileSync(LATEST_BUILD_JSON, JSON.stringify(latestBuildData, null, 2), {encoding: 'utf8'});
 

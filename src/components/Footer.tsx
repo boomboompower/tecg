@@ -98,29 +98,24 @@ function DebugDialog() {
     const {closeDialog} = useDialogProvider();
 
     const coloredComments = useMemo(() => {
-        let currentGroup: 'none' | 'added' | 'unadded' = 'none';
+        let currentGroup: 'none' | 'added' | 'removed' = 'none';
 
         return latestBuild.comments.map((line, index) => {
             const lowerLine = line.toLowerCase();
 
             // Simple logic to determine the current group based on the line content
-            if (lowerLine.includes('unadded experiments')) {
-                currentGroup = 'unadded';
-            } else if (lowerLine.includes('added experiments')) {
+            if (lowerLine.includes('removed experiments') || lowerLine.includes('deactivated experiments')) {
+                currentGroup = 'removed';
+            } else if (lowerLine.includes('added experiments') || lowerLine.includes('activated experiments')) {
                 currentGroup = 'added';
             } else if (line.trim() === '') {
                 currentGroup = 'none';
             }
 
-            // In the future, this should be done in the backend itself.
-            // I know that the backend is written for optimization, not for readability. But it's
-            // still a good idea to replace how we generate the data in the future.
-            line = line.replace(/\bUnadded\b/g, 'Removed').replace(/\bunadded\b/g, 'removed');
-
             // Determine the color class based on the current group
             let colorClass = 'text-white';
             if (currentGroup === 'added') colorClass = 'text-green-400';
-            else if (currentGroup === 'unadded') colorClass = 'text-red-400';
+            else if (currentGroup === 'removed') colorClass = 'text-red-400';
 
             return (
                 <div key={index} className={colorClass}>

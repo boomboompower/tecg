@@ -41,3 +41,9 @@ type StoredBuildData = {
     };
     comments: string[];
 }
+
+type RemoteBuildData = {
+    comments: string[];
+    shorthand: ShorthandData;
+    buildVersion: string;
+}
