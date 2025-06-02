@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/tecg/static/css/main.aacd51bb.css",
-    "main.js": "/tecg/static/js/main.cfae0f4c.js",
+    "main.js": "/tecg/static/js/main.c4709f89.js",
     "static/js/268.dffbb592.chunk.js": "/tecg/static/js/268.dffbb592.chunk.js",
     "index.html": "/tecg/index.html"
   },
   "entrypoints": [
     "static/css/main.aacd51bb.css",
-    "static/js/main.cfae0f4c.js"
+    "static/js/main.c4709f89.js"
   ]
 }
