@@ -96,6 +96,7 @@ function hasNewBuild(newestBuild: string, newestTime: number, storedData: Stored
     // Check if environment variable are set for downloading the data
     const prodExpURL = process.env.EXPERIMENTS_URL;
     const prodExpDataURL = process.env.EXPERIMENTS_DATA_URL;
+    const forceUpdate = process.env.FORCE_UPDATE && process.env.FORCE_UPDATE === 'true';
 
     if (!prodExpURL) {
         log.error('Cannot determine experiment source, EXPERIMENTS_URL are not set!');
@@ -121,7 +122,7 @@ function hasNewBuild(newestBuild: string, newestTime: number, storedData: Stored
     const updatedAt = formatDate(updateTime, 'UTC');
 
     // Check if the latest build is already stored, if so, we can skip the rest of the process
-    if (!hasNewBuild(buildInfo.releases[0].buildId, updateTime, previousBuildInfo)) {
+    if (!forceUpdate && !hasNewBuild(buildInfo.releases[0].buildId, updateTime, previousBuildInfo)) {
         log.warn('No new build found - Build version remains unchanged.')
 
         return;
