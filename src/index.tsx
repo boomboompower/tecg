@@ -2,6 +2,7 @@ import './index.css'
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { HolidaySeasons } from './components/HolidaySeasons';
+import { OptionalAnalytics } from './components/OptionalAnalytics';
 import { ExperimentOverridesProvider } from './contexts/ExperimentOverridesProvider';
 import { DialogProvider } from './contexts/DialogProvider';
 import { SortBarProvider } from './contexts/SortBarProvider';
@@ -30,5 +31,6 @@ const root = createRoot(domNode);
 root.render(
     <React.StrictMode>
         <App />
+        <OptionalAnalytics />
     </React.StrictMode>
 );
