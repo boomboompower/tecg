@@ -3,8 +3,9 @@ import {Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle} from '@he
 
 type DialogContent = {
     title: string;
-    description?: string;
     content: React.ReactNode;
+    wider?: boolean
+    description?: string;
 }
 
 interface DialogContextProps {
@@ -22,6 +23,10 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const closeDialog = () => {
         setIsDialogOpen(false);
     };
+
+    const panelClasses = dialogContent?.wider ?
+        'w-full max-w-3xl' :
+        'w-full max-w-lg';
 
     return (
         <DialogContext.Provider
@@ -44,7 +49,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
                     <DialogPanel
                         transition
-                        className='w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-xl bg-white/5 p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0'
+                        className={`${panelClasses} max-h-[90vh] overflow-y-auto rounded-xl bg-white/5 p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0`}
                     >
                         <DialogTitle as="h3" className="text-lg font-semibold text-white">
                             {dialogContent?.title}

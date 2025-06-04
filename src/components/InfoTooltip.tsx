@@ -1,7 +1,8 @@
-import { InformationCircleIcon, CheckIcon, ClipboardIcon } from '@heroicons/react/20/solid';
+import { MouseEvent } from 'react';
+import { InformationCircleIcon } from '@heroicons/react/20/solid';
 import { useDialogProvider } from '../contexts/DialogProvider';
 import { CollatedExperiment } from '../hooks/useExperiments';
-import { MouseEvent, useState } from 'react';
+import { Pill } from './Pill';
 
 interface InfoTooltipProps {
     experiment: CollatedExperiment;
@@ -9,91 +10,68 @@ interface InfoTooltipProps {
     prettyName?: string;
 }
 
-function DataBlock({text}: {text: string}) {
-    const [ isShowingCopyFeedback, setIsShowingCopyFeedback ] = useState(false);
-
-    // This component is used to display a piece of data in a styled block
-    // Should also support long text wrapping and overflow handling
-    // If clicked, it should be copied to the clipboard with visual feedback (not with alert)
-    const handleCopy = () => {
-        if (isShowingCopyFeedback) {
-            return; // Prevent multiple clicks from triggering the copy action
-        }
-
-        setIsShowingCopyFeedback(true);
-        setTimeout(() => {
-            setIsShowingCopyFeedback(false);
-        }, 2000); // Reset feedback after 2 seconds
-
-        navigator.clipboard.writeText(text).then(() => {
-            console.log('Text copied to clipboard:', text);
-        }).catch(err => {
-            console.error('Failed to copy text: ', err);
-        });
-    }
-
-    // Copied feedback should be a tick in the center of the block
-
-    return (
-        <div className={`${isShowingCopyFeedback ? 'bg-gray-700' : 'bg-gray-600 cursor-pointer'} text-white relative p-2 rounded shadow-sm overflow-x-auto whitespace-pre-wrap transition`} onClick={handleCopy}>
-            {isShowingCopyFeedback ? (
-                <div className="text-green-400 text-center">
-                    <CheckIcon className="inline-block w-5 h-5" />
-                    <div className="text-xs">Copied!</div>
-                </div>
-            ) : (
-                <div>
-                    {text}
-                    <ClipboardIcon className="absolute top-2 right-2 w-3 h-3 text-gray-400" />
-                </div>
-            )}
-        </div>
-    )
-}
-
 function DialogContent({ experiment }: { experiment: CollatedExperiment }) {
     // Show a grid with the experiment data using tailwind
+    // 2-column grid (label + value pairs side-by-side).
+    // The title should be bold and the value should be normal. Width of the grid should be responsive.
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <strong>ID:</strong> <DataBlock text={experiment.id} />
-            </div>
-            <div>
-                <strong>Name:</strong> <DataBlock text={experiment.name} />
-            </div>
-            <div>
-                <strong>Active:</strong> <DataBlock text={experiment.active ? 'Yes' : 'No'} />
-            </div>
-            <div>
-                <strong>Has Been Active:</strong> <DataBlock text={experiment.hasBeenActive ? 'Yes' : 'No'} />
-            </div>
-            <div>
-                <strong>Serving One:</strong> <DataBlock text={experiment.servingOne ? 'Yes' : 'No'} />
-            </div>
-            <div>
-                <strong>Default Group:</strong> <DataBlock text={experiment.default} />
-            </div>
-            {experiment.dateFound && (
-                <div>
-                    <strong>Date Found:</strong> <DataBlock text={new Date(experiment.dateFound).toLocaleString()} />
+        <>
+            <hr className="border-gray-700 my-2" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+                <div className="flex items-center">
+                    <div className="font-semibold">ID:</div>
+                    <div className="ml-2">{experiment.id}</div>
                 </div>
-            )}
-            {experiment.dateActivated && (
-                <div>
-                    <strong>Date Activated:</strong> <DataBlock text={new Date(experiment.dateActivated).toLocaleString()} />
+                <div className="flex items-center">
+                    <div className="font-semibold">Name:</div>
+                    <div className="ml-2">{experiment.name}</div>
                 </div>
-            )}
-            {experiment.dateDeactivated && (
-                <div>
-                    <strong>Date Deactivated:</strong> <DataBlock text={new Date(experiment.dateDeactivated).toLocaleString()} />
+                <div className="flex items-center">
+                    <div className="font-semibold">Active:</div>
+                    <div className={`ml-2 ${experiment.active ? 'text-green-500' : 'text-red-500'}`}>
+                        {experiment.active ? 'Yes' : 'No'}
+                    </div>
                 </div>
-            )}
-            {experiment.staffOverride && (
-                <div>
-                    <strong>Staff Override:</strong> <DataBlock text={experiment.staffOverride} />
+                <div className="flex items-center">
+                    <div className="font-semibold">Has Been Active:</div>
+                    <div className={`ml-2 ${experiment.hasBeenActive ? 'text-green-500' : 'text-red-500'}`}>
+                        {experiment.hasBeenActive ? 'Yes' : 'No'}
+                    </div>
                 </div>
-            )}
-        </div>
+                <div className="flex items-center">
+                    <div className="font-semibold">Serving One:</div>
+                    <div className={`ml-2 ${experiment.servingOne ? 'text-green-500' : 'text-red-500'}`}>
+                        {experiment.servingOne ? 'Yes' : 'No'}
+                    </div>
+                </div>
+                <div className="flex items-center">
+                    <div className="font-semibold">Default Group:</div>
+                    <div className="ml-2"><Pill label={experiment.default} className={'ml-0'} /></div>
+                </div>
+                <div className="flex items-center">
+                    <div className="font-semibold">Date Found:</div>
+                    <div className="ml-2">{experiment.dateFound ? new Date(experiment.dateFound).toLocaleString() : 'N/A'}</div>
+                </div>
+                {experiment.dateActivated && (
+                    <div className="flex items-center">
+                        <div className="font-semibold">Date Activated:</div>
+                        <div className="ml-2">{new Date(experiment.dateActivated).toLocaleString()}</div>
+                    </div>
+                )}
+                {experiment.dateDeactivated && (
+                    <div className="flex items-center">
+                        <div className="font-semibold">Date Deactivated:</div>
+                        <div className="ml-2">{new Date(experiment.dateDeactivated).toLocaleString()}</div>
+                    </div>
+                )}
+                {experiment.staffOverride && (
+                    <div className="flex items-center">
+                        <div className="font-semibold">Staff Override:</div>
+                        <div className="ml-2">{experiment.staffOverride}</div>
+                    </div>
+                )}
+            </div>
+        </>
     )
 }
 
@@ -105,6 +83,7 @@ export function InfoTooltip({experiment, override, prettyName}: InfoTooltipProps
 
         openDialogue({
             title: `Experiment: ${prettyName || experiment.name}`,
+            wider: true,
             description: `Some additional details for experiment ${prettyName || experiment.name}`,
             content: (
                 <div>

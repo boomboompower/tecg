@@ -19,6 +19,7 @@ type LatestBuild = {
         removed: number;
         activated: number;
         deactivated: number;
+        modified: number;
     };
     comments: string[];
 }
@@ -36,6 +37,7 @@ export function Footer() {
         openDialogue({
             content: <DebugDialog />,
             title: 'Debug Information',
+            wider: true,
         });
     }
 
@@ -99,7 +101,7 @@ function DebugDialog() {
     const {closeDialog} = useDialogProvider();
 
     const coloredComments = useMemo(() => {
-        let currentGroup: 'none' | 'added' | 'removed' = 'none';
+        let currentGroup: 'none' | 'added' | 'removed' | 'modified' = 'none';
 
         return latestBuild.comments.map((line, index) => {
             const lowerLine = line.toLowerCase();
@@ -109,6 +111,8 @@ function DebugDialog() {
                 currentGroup = 'removed';
             } else if (lowerLine.includes('added experiments') || lowerLine.includes('activated experiments')) {
                 currentGroup = 'added';
+            } else if (lowerLine.includes('were modified')) {
+                currentGroup = 'modified';
             } else if (line.trim() === '') {
                 currentGroup = 'none';
             }
@@ -116,6 +120,7 @@ function DebugDialog() {
             // Determine the color class based on the current group
             let colorClass = 'text-white';
             if (currentGroup === 'added') colorClass = 'text-green-400';
+            else if (currentGroup === 'modified') colorClass = 'text-yellow-400';
             else if (currentGroup === 'removed') colorClass = 'text-red-400';
 
             return (
@@ -137,17 +142,18 @@ function DebugDialog() {
             <p className="text-sm text-gray-400">
                 Total Experiments: <span className="text-white">{latestBuild.experimentsCount}</span>
             </p>
-            <p className="text-sm text-gray-400">
+            <div className="text-sm text-gray-400">
                 Changes in last build:
                 <ul className="list-disc list-inside mt-2">
                     <li>Added: <span className="text-white">{latestBuild.shorthand.added}</span></li>
                     <li>Removed: <span className="text-white">{latestBuild.shorthand.removed}</span></li>
                     <li>Activated: <span className="text-white">{latestBuild.shorthand.activated}</span></li>
                     <li>Deactivated: <span className="text-white">{latestBuild.shorthand.deactivated}</span></li>
+                    <li>Modified: <span className="text-white">{latestBuild.shorthand.modified}</span></li>
                 </ul>
-            </p>
+            </div>
             <div className="text-sm text-gray-400 mt-2">
-                <pre className="bg-black/50 text-sm p-4 rounded-md whitespace-pre-wrap font-mono mt-2 overflow-x-auto">
+                <pre className="bg-black/50 text-sm p-4 rounded-md whitespace-pre font-mono mt-2 overflow-x-auto">
                     {coloredComments}
                 </pre>
             </div>

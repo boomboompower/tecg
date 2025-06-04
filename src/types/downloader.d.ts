@@ -27,6 +27,7 @@ type ShorthandData = {
     removed: number,           // Number of experiments removed
     activated: number,         // Number of experiments activated
     deactivated: number        // Number of experiments deactivated
+    modified: number           // Number of experiments modified
 }
 
 type StoredBuildData = {

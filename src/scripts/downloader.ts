@@ -32,7 +32,7 @@ function constructShorthandMessage(shorthandData: ShorthandData, updatedAt: numb
     const compactTimestamp = formatCompactTimestamp(updatedAt);
 
     // Shorthand message (below ~72 characters) to display on GitHub's commit page
-    return `build: ${compactTimestamp} | +${shorthandData.added}/-${shorthandData.removed} exp, +${shorthandData.activated}/-${shorthandData.deactivated} active`;
+    return `build: ${compactTimestamp} | +${shorthandData.added}/-${shorthandData.removed} exp, +${shorthandData.activated}/-${shorthandData.deactivated} active, ${shorthandData.modified} modified`;
 }
 
 function getPreviousBuildInfo(): StoredBuildData | null {
@@ -154,7 +154,7 @@ function hasNewBuild(newestBuild: string, newestTime: number, storedData: Stored
     if (!buildData || !buildData.shorthand || !buildData.comments) {
         buildData = {
             comments: ['Failed to fetch build data, using defaults'],
-            shorthand: {added: 0, removed: 0, activated: 0, deactivated: 0},
+            shorthand: {added: 0, removed: 0, activated: 0, deactivated: 0, modified: 0},
             buildVersion: buildInfo.releases[0].buildId
         }
     }
