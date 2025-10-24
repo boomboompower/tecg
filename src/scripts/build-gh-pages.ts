@@ -59,6 +59,7 @@ async function buildPage() {
         log.info('Running gh-pages command...');
 
         await publish(resolve('./build'), {
+            repo: `https://${process.env.GH_TOKEN}@github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}.git`,
             message: message,
             branch: 'gh-pages',
             dotfiles: false,
@@ -82,6 +83,11 @@ async function buildPage() {
         log.error('gh-pages command failed:', err);
         process.exit(1);
     }
+}
+
+if (!process.env.GH_TOKEN || !process.env.GH_USERNAME || !process.env.GH_REPO) {
+    log.error('GH_TOKEN, GH_USERNAME, or GH_REPO environment variables are not set.');
+    process.exit(1);
 }
 
 buildPage();

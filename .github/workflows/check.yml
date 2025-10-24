@@ -1,15 +1,20 @@
 name: App Update Check
 
 on:
+  schedule:
+    - cron: '0 12 * * *'  # optional: daily at 12:00 UTC
   workflow_dispatch:
     inputs:
       message:
         description: The commit message to use
         required: false
 
+permissions:
+  contents: write
+
 jobs:
   check:
-    if: github.repository == 'boomboompower/twitch-experiments' || github.event_name == 'workflow_dispatch'
+    if: github.repository == 'boomboompower/tecg' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,30 +25,19 @@ jobs:
           cache: npm
 
       - run: npm install
-      - run: npm run start --if-present
+      - run: npm run build --if-present
         env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          EXPERIMENTS_URL: ${{ secrets.EXPERIMENTS_URL }}
+          EXPERIMENTS_DATA_URL: ${{ secrets.EXPERIMENTS_DATA_URL }}
+          # If a workflow dispatch, and the message is 'force', then force update
+          FORCE_UPDATE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.message == 'force' && 'true' || 'false' }}
 
-      - name: Read Version
-        id: commit
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./src/data/commit.txt
-
-      - name: Commit Version
-        shell: bash
-        run: |
-          git config --global user.name 'github-bot'
-          git config --global user.email '6031226+github-bot@users.noreply.github.com'
-          git add docs/settings.js
-          git add docs/production.js
-          if [ "${{ github.event.inputs.message }}" == "" ]; then
-            git commit -m "${{ steps.time.outputs.commit }}"
-          else
-            git commit -m "${{ github.event.inputs.message }}"
-          fi
-          git push
-        continue-on-error: true
+      - run: npm run build-step-2 --if-present
+      - run: npm run build-step-3-extended --if-present
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_USERNAME: 'boomboompower'
+          GH_REPO: 'tecg'
 
       - name: Done
         run: |

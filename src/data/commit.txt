@@ -1,49 +1,122 @@
-build: 2025-06-04 00:46 UTC | +1/-0 exp, +1/-1 active, 7 modified
+build: 2025-10-24 08:28 UTC | +1/-4 exp, +1/-4 active, 18 modified
 
 
-1 experiments were added, 0 experiments were removed.
+1 experiments were added, 4 experiments were removed.
 Added experiments:
-- c9ce01c3-8135-408c-a924-e43322987b58 (video-ads-sub-upsell-type)
-  * turbo (1)
-  * channel-sub (1)
-  * mixed (1)
-1 experiments were activated, 1 experiments were deactivated.
-Activated experiments:
-- c9ce01c3-8135-408c-a924-e43322987b58 (video-ads-sub-upsell-type)
-  * turbo (1)
-  * channel-sub (1)
-  * mixed (1)
-Deactivated experiments:
-- f786140e-78ca-47b4-b7a4-620c09247899 (xo_cc_expire)
+- 0a603b81-08db-4537-a52a-bf7b71ac6182 (garfield_discovery_control)
+  * control (100)
+  * variant (0)
+Removed experiments:
+- e9ec257a-77ea-4926-a072-b43d915abcca (hype-train-left-nav)
+  * control (0)
+  * treatment1 (0)
+  * treatment2 (100)
+- ca505d53-5922-46ba-91d7-25ee70a7a41e (percolite_CE_logged-out-experiment)
   * control (0)
   * variant (100)
-7 experiments were modified:
-- 784cb249-5507-4cc2-bfec-a2190d291ad6 (lychee_durian_cherry)
-  * staffOverride changed from 'none' to 'variant'
-- d436491a-31fd-4171-8828-064235f3f4e6 (nabe_experiment)
-  * group 'control' weight changed from 10 to 5
-  * group 'turbo_4' weight changed from 20 to 0
-  * group 'support_1' weight changed from 25 to 90
-  * group 'turbo_1' weight changed from 25 to 5
-  * group 'support_4' weight changed from 20 to 0
-- 20337876-3d95-4fe9-afe1-3ffb22208593 (next-up)
+  * variant2 (0)
+- cc339232-6c9f-4a36-b443-09c082651472 (seamless_subscription_upgrades)
+  * control (0)
+  * tabs (0)
+  * extra_button (100)
+- b89917e6-aaaa-44ac-9fe4-7f34b1b2f89c (seg_mented_signup)
+  * control (0)
+  * variant_1 (0)
+  * variant_2 (0)
+  * variant_3 (50)
+  * variant_4 (50)
+1 experiments were activated, 4 experiments were deactivated.
+Activated experiments:
+- 0a603b81-08db-4537-a52a-bf7b71ac6182 (garfield_discovery_control)
+  * control (100)
+  * variant (0)
+Deactivated experiments:
+- 4006baeb-c62e-44da-96f0-c8706c58f378 (mysterious_and_important_work)
+  * control (100)
+  * variant (0)
+- ca505d53-5922-46ba-91d7-25ee70a7a41e (percolite_CE_logged-out-experiment)
+  * control (0)
+  * variant (100)
+  * variant2 (0)
+- b89917e6-aaaa-44ac-9fe4-7f34b1b2f89c (seg_mented_signup)
+  * control (0)
+  * variant_1 (0)
+  * variant_2 (0)
+  * variant_3 (50)
+  * variant_4 (50)
+- e161fc0c-b75a-4801-b65c-36e911afd28f (twilight_p_4)
+  * control (100)
+  * active (0)
+18 experiments were modified:
+- 4437d119-2c19-4770-8492-d55bf43a56fc (ads_cspon_video_token_refresh)
+  * group 'control' weight changed from 100 to 0
+  * group 'active' weight changed from 0 to 100
+- a15d7789-d167-44d0-8eea-f2e2c0250393 (android_kmp_gql_chat_send)
+  * default group changed from 'control' to 'active_26.1'
+  * group 'control' weight changed from 100 to 0
+  * group 'active_25.3' weight changed from none to 0
+  * group 'active_26.1' weight changed from none to 100
+- c86b522c-2b6c-40d6-97c2-c8912d1f8763 (disco_bpli)
   * servingOne changed from false to true
-  * group 'control' weight changed from 0 to 100
-  * group 'variant1' weight changed from 50 to 0
-  * group 'variant2' weight changed from 50 to 0
-- 0a6b4cdb-c660-4b1c-a014-514efff5493e (payments_pantera)
-  * group 'control' weight changed from 34 to 90
-  * group 'variant_a' weight changed from 33 to 5
-  * group 'variant_b' weight changed from 33 to 5
-- 1ed04f13-b393-41b0-b432-3d48742f3d82 (Twilight amazon-ivs-web-broadcast NPM Distribution)
+  * group 'control' weight changed from 75 to 100
+  * group 'variant1' weight changed from 25 to 0
+- d078e8f2-943f-45f2-aaaa-746513cea610 (gift_refresh_v2)
+  * default group changed from 'control' to 'treatment_2'
+  * servingOne changed from false to true
+  * group 'control' weight changed from 33 to 0
+  * group 'treatment_1' weight changed from 33 to 0
+  * group 'treatment_2' weight changed from 33 to 100
+- 3ffb2f66-1065-4dec-9e43-457580793237 (homepage_carousel_recs_fallback)
   * servingOne changed from true to false
-  * group 'variant-wb-a' weight changed from 0 to 5
-  * group 'variant-wb-b' weight changed from 100 to 95
-- 7ff6a29e-5681-45ed-ad66-46d35a9549bc (Twilight Player Core NPM Distribution (Public))
-  * default group changed from 'variant-a' to 'variant-b'
+  * group 'control' weight changed from 100 to 50
+  * group 'promotions_recs_fallback' weight changed from 0 to none
+  * group 'treatment' weight changed from none to 50
+- a680f572-fc37-4836-b07b-a2357b4037cb (ivs_player_abr_score)
   * servingOne changed from false to true
-  * group 'variant-a' weight changed from 50 to 0
-  * group 'variant-b' weight changed from 50 to 100
-- f786140e-78ca-47b4-b7a4-620c09247899 (xo_cc_expire)
-  * default group changed from 'control' to 'variant'
+  * group 'control' weight changed from 50 to 100
+  * group 'treatment' weight changed from 50 to 0
+- 3712c2b4-41d2-437c-8e37-83e236543cef (ivs_player_probe_endpoint)
+  * servingOne changed from false to true
+  * group 'control' weight changed from 95 to 0
+  * group 'treatment' weight changed from 5 to 100
+- df24c2db-dc5a-40c9-8508-1c65fbc4ca7c (ivs_web_edge_prewarm_v2)
+  * servingOne changed from false to true
+  * group 'control' weight changed from 95 to 100
+  * group 'treatment' weight changed from 5 to 0
+- a5c3a8f0-d293-4597-af87-f0352c58d1b3 (ivs_web_player_device_config_prod_test)
+  * group 'treatment' weight changed from none to 0
+- 784cb249-5507-4cc2-bfec-a2190d291ad6 (lychee_durian_cherry)
+  * servingOne changed from false to true
+  * group 'control' weight changed from 80 to 0
+  * group 'variant' weight changed from 20 to 100
+- 4006baeb-c62e-44da-96f0-c8706c58f378 (mysterious_and_important_work)
+  * staffOverride changed from 'variant' to 'none'
+  * active flag changed from true to false
+- 20337876-3d95-4fe9-afe1-3ffb22208593 (next-up)
+  * group 'control' weight changed from 0 to 100
+  * group 'variant1' weight changed from 100 to none
+  * group 'variant' weight changed from none to 0
+- 0a6b4cdb-c660-4b1c-a014-514efff5493e (payments_pantera)
+  * servingOne changed from false to true
+  * group 'control' weight changed from 45 to 100
+  * group 'variant_a' weight changed from 5 to 0
+  * group 'variant_b' weight changed from 5 to 0
+  * group 'variant_c' weight changed from 45 to 0
+- 45142352-2803-406c-81c8-32ee01fe6401 (strawberry-apple-plum)
+  * servingOne changed from false to true
+  * group 'control' weight changed from 50 to 0
+  * group 'variant' weight changed from 50 to 100
+- 7eeaa98b-d18e-41ec-bac5-0d6eb9b8aec2 (supply-leapfrog)
+  * group 'test' weight changed from none to 0
+- 1ed04f13-b393-41b0-b432-3d48742f3d82 (Twilight amazon-ivs-web-broadcast NPM Distribution)
+  * default group changed from 'variant-wb-a' to 'wb-base'
+  * servingOne changed from false to true
+  * group 'variant-wb-a' weight changed from 50 to 0
+  * group 'wb-base' weight changed from 0 to 100
+  * group 'variant-wb-b' weight changed from 50 to 0
+- 7be6e176-3c3e-46a3-ab50-abd8dc73da1e (Twilight Player Core NPM Distribution (Staff))
+  * default group changed from 'variant-b' to 'base'
+  * group 'base' weight changed from 0 to 100
+  * group 'variant-b' weight changed from 100 to 0
+- e161fc0c-b75a-4801-b65c-36e911afd28f (twilight_p_4)
   * active flag changed from true to false

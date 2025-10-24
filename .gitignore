@@ -35,3 +35,7 @@ Thumbs.db
 
 # TypeScript
 *.tsbuildinfo
+
+# Build artifacts
+**/*/experiments.json
+**/*/latest_build.json
