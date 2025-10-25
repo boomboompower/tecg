@@ -43,7 +43,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 open={isDialogOpen}
                 onClose={closeDialog}
                 transition
-                className="fixed inset-0 flex w-screen items-center justify-center bg-black/30 p-4 transition duration-300 ease-out data-closed:opacity-0"
+                className="fixed inset-0 flex w-screen items-center justify-center bg-black/30 p-4 transition duration-300 ease-out data-closed:opacity-0 z-10"
             >
                 <DialogBackdrop className="fixed inset-0 bg-black/30" />
                 <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
