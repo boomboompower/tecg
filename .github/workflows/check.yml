@@ -24,6 +24,12 @@ jobs:
           node-version: 16.x
           cache: npm
 
+      - name: Git Credentials
+        shell: bash
+        run: |
+          git config --global user.name 'github-bot'
+          git config --global user.email '6031226+github-bot@users.noreply.github.com'
+
       - run: npm install
       - run: npm run build --if-present
         env:
