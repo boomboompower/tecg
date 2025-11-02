@@ -1,6 +1,7 @@
 import {existsSync, readFileSync, writeFileSync} from 'fs';
 import {formatCompactTimestamp, formatDate} from '../utils/formatDate';
 import {log} from '../utils/logger';
+import fetch from 'node-fetch';
 
 const COMMIT_MESSAGE = './src/data/commit.txt';
 const EXPERIMENTS_DATA = './src/data/experiments.json';
@@ -133,7 +134,7 @@ function hasNewBuild(newestBuild: string, newestTime: number, storedData: Stored
     // Download the new data from an environment variable
     const experiments: ExperimentData[] | null = await fetch(prodExpURL).then(async (o) => {
         return await o.json();
-    }).catch((err) => {
+    }).catch((err: unknown): null => {
         log.error('Failed to fetch experiments:', err);
         return null;
     });
@@ -145,7 +146,7 @@ function hasNewBuild(newestBuild: string, newestTime: number, storedData: Stored
 
     let buildData: RemoteBuildData | null = await fetch(prodExpDataURL).then(async (o) => {
         return await o.json();
-    }).catch((err) => {
+    }).catch((err: unknown): null => {
         log.error('Failed to fetch experiments data:', err);
         return null;
     });

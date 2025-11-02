@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           always-auth: false
-          node-version: 16.x
+          node-version: 24.x
           cache: npm
 
       - name: Git Credentials
