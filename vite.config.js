@@ -13,7 +13,7 @@ export default defineConfig({
     build: {
         sourcemap: !isProd,  // You can adjust this to `false` if you want to disable sourcemaps for production
         minify: isProd ? 'esbuild' : false,  // Use 'esbuild' for production minification
-        outDir: 'dist',   // Specify where the built files should go
+        outDir: 'build',   // Specify where the built files should go
         chunkSizeWarningLimit: 1000,  // Increase chunk size warning limit
     },
     esbuild: {
