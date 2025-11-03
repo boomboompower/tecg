@@ -1,22 +1,22 @@
-import React, {useMemo} from 'react';
-import {Button, Textarea} from '@headlessui/react';
-import {useDialogProvider} from '../contexts/DialogProvider';
-import {useExperimentOverrides} from '../contexts/ExperimentOverridesProvider';
-import {convertCookieToOverrides} from '../utils/convertCookieToOverrides';
-import {useExperiments} from '../hooks/useExperiments';
-import {convertOverridesToCookie} from '../utils/convertOverridesToCookie';
+import { Button, Textarea } from '@headlessui/react';
+import { useMemo } from 'react';
+import { useDialogProvider } from '../contexts/DialogProvider';
+import { useExperimentOverrides } from '../contexts/ExperimentOverridesProvider';
+import { useExperiments } from '../hooks/useExperiments';
+import { convertCookieToOverrides } from '../utils/convertCookieToOverrides';
+import { convertOverridesToCookie } from '../utils/convertOverridesToCookie';
 
 export function ActionBar() {
-    const {openDialogue} = useDialogProvider();
-    const {overrides} = useExperimentOverrides()
+    const { openDialogue } = useDialogProvider();
+    const { overrides } = useExperimentOverrides()
 
     const overrideCount = useMemo(() => {
         return Object.keys(overrides).length;
-    }, [overrides]);
+    }, [ overrides ]);
 
     const openImportDialog = () => {
         openDialogue({
-            content: <ImportDialog />,
+            content: <ImportDialog/>,
             description: 'Paste your override JSON here to import.',
             title: 'Import Overrides',
         })
@@ -24,7 +24,7 @@ export function ActionBar() {
 
     const openExportDialog = () => {
         openDialogue({
-            content: <ExportDialog closeDialog={() => openDialogue(null)} />,
+            content: <ExportDialog closeDialog={() => openDialogue(null)}/>,
             description: 'This will copy your current overrides to the clipboard.',
             title: 'Export Overrides',
         });
@@ -32,7 +32,7 @@ export function ActionBar() {
 
     const openResetDialog = () => {
         openDialogue({
-            content: <ResetDialog />,
+            content: <ResetDialog/>,
             description: 'This will reset all your overrides to the default settings.',
             title: 'Reset Overrides',
         });
@@ -44,14 +44,14 @@ export function ActionBar() {
                 aria-label={'Import an override from clipboard'}
                 title={'Import overrides from clipboard. This will paste the overrides from your clipboard.'}
                 onClick={openImportDialog}
-                className={'w-full bg-tw text-white text-sm font-semibold py-1 px-3 rounded-md transition disabled:text-white/50'}>
+                className={'w-full bg-tw text-white text-sm font-semibold py-1 px-3 rounded-md transition cursor-pointer disabled:text-white/50 disabled:cursor-default'}>
                 Import
             </Button>
             <Button
                 aria-label={'Export overrides to clipboard'}
                 title={'Export overrides to clipboard. This will copy the current overrides to your clipboard.'}
                 onClick={openExportDialog}
-                className="w-full bg-export text-white text-sm font-semibold py-1 px-3 rounded-md transition disabled:text-white/50">
+                className="w-full bg-export text-white text-sm font-semibold py-1 px-3 rounded-md transition cursor-pointer disabled:text-white/50 disabled:cursor-default">
                 Export
             </Button>
             <Button
@@ -59,7 +59,7 @@ export function ActionBar() {
                 title={overrideCount > 0 ? 'Reset all overrides to default' : 'No overrides to reset'}
                 disabled={overrideCount === 0}
                 onClick={openResetDialog}
-                className="w-full bg-reset text-white text-sm font-semibold py-1 px-3 rounded-md transition disabled:text-white/50">
+                className="w-full bg-reset text-white text-sm font-semibold py-1 px-3 rounded-md transition cursor-pointer disabled:text-white/50 disabled:cursor-default">
                 {overrideCount > 0 ? 'Reset' : 'No Overrides'}
             </Button>
         </div>
@@ -67,15 +67,15 @@ export function ActionBar() {
 }
 
 function ImportDialog() {
-    const {closeDialog} = useDialogProvider();
-    const {overrideOverrides} = useExperimentOverrides()
-    const {experiments} = useExperiments();
+    const { closeDialog } = useDialogProvider();
+    const { overrideOverrides } = useExperimentOverrides()
+    const { experiments } = useExperiments();
 
     return (
         <div>
             <Textarea
                 className="w-full mt-2 p-2 border rounded-md h-48 resize-none bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder='{%22experiments%22:{}%2C%22disabled%22:[]}'
+                placeholder="{%22experiments%22:{}%2C%22disabled%22:[]}"
                 id={'cookie-input'}
             />
             <Button
@@ -117,8 +117,8 @@ function ImportDialog() {
 }
 
 function ExportDialog({ closeDialog }: { closeDialog: () => void }) {
-    const {experiments} = useExperiments();
-    const {overrides} = useExperimentOverrides();
+    const { experiments } = useExperiments();
+    const { overrides } = useExperimentOverrides();
 
     // Convert overrides to cookie format
     const cookie = convertOverridesToCookie(overrides, experiments);
@@ -153,8 +153,8 @@ function ExportDialog({ closeDialog }: { closeDialog: () => void }) {
 }
 
 function ResetDialog() {
-    const {closeDialog} = useDialogProvider();
-    const {clearOverrides, overrides} = useExperimentOverrides();
+    const { closeDialog } = useDialogProvider();
+    const { clearOverrides, overrides } = useExperimentOverrides();
 
     // We only need the keys of the overrides to display
     const overrideKeys = Object.keys(overrides);

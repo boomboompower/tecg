@@ -7,7 +7,7 @@ import { publish } from 'gh-pages';
 const latestBuildJsonPath = './src/data/latest_build.json';
 const commitMsgPath = './src/data/commit.txt';
 let message = 'Default commit message';
-let jsonData: { buildId: string, updatedAt: number };
+let jsonData: { buildId: string, updatedAt: number | null };
 
 function formatDuration(milliseconds: number): string {
     // If it only has milliseconds, return it as is with 'ms' suffix
@@ -28,7 +28,7 @@ async function buildPage() {
     try {
         const data = readFileSync(latestBuildJsonPath, 'utf8');
         jsonData = JSON.parse(data);
-    } catch (err: unknown) {
+    } catch (_err: unknown) {
         jsonData = { buildId: 'unknown', updatedAt: null };
     }
 

@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import { useMemo } from 'react';
 import { Button } from '@headlessui/react';
 import { CodeBracketSquareIcon } from '@heroicons/react/24/solid';
 
@@ -42,14 +42,14 @@ export function Footer() {
     }
 
     return (
-            <footer className="bg-gray-900 text-gray-400 py-8 px-4 mt-4 md:px-16 text-xs md:text-base">
+        <footer className="bg-gray-900 text-gray-400 py-8 px-4 mt-4 md:px-16 text-xs md:text-base">
             <div className="max-w-7xl mx-auto">
                 <div className="space-y-4">
                     <h2 className="flex items-baseline gap-2 text-2xl font-bold text-white">
                         <span>About TECG - Stream Service Experiment Cookie Generator</span>
                         <span className="text-gray-500 hover:text-gray-300 cursor-pointer" title="Debug">
                             <span className="sr-only">Debug</span>
-                            <button onClick={() => openDebugDialog() } className="align-middle" >
+                            <button onClick={() => openDebugDialog() } className="align-middle cursor-pointer" >
                                 <CodeBracketSquareIcon className={'w-5 h-5 size-5'} />
                             </button>
                         </span>
@@ -71,7 +71,7 @@ export function Footer() {
                         <strong>Important Notice:</strong>
                         <p>Using these experimental overrides comes with some risks. Misusing this tool <span
                             className='italic'>COULD</span> result in
-                            account restrictions, suspensions or other penalties depending on the platform's policies.
+                            account restrictions, suspensions or other penalties depending on the platform&apos;s policies.
                             By using TECG, you acknowledge full responsibility for any actions taken.</p>
                     </Alert>
 
@@ -129,7 +129,7 @@ function DebugDialog() {
                 </div>
             );
         });
-    }, [latestBuild.comments]);
+    }, []);
 
     return (
         <div>

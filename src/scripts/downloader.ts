@@ -78,7 +78,7 @@ function hasNewBuild(newestBuild: string, newestTime: number, storedData: Stored
 
     // If the build ID is different, we have a new build
     if (prevBuild !== newestBuild.trim()) {
-        log.info(`New build detected: ${newestBuild} -> ${prevBuild}`);
+        log.info(`New build detected: ${prevBuild} -> ${newestBuild}`);
         return true;
     }
 
@@ -123,7 +123,7 @@ function hasNewBuild(newestBuild: string, newestTime: number, storedData: Stored
     const updatedAt = formatDate(updateTime, 'UTC');
 
     // Check if the latest build is already stored, if so, we can skip the rest of the process
-    if (!forceUpdate && !hasNewBuild(buildInfo.releases[0].buildId, updateTime, previousBuildInfo)) {
+    if (!forceUpdate && previousBuildInfo && !hasNewBuild(buildInfo.releases[0].buildId, updateTime, previousBuildInfo)) {
         log.warn('No new build found - Build version remains unchanged.')
 
         return;

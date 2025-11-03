@@ -7,7 +7,7 @@ type SortBarContextType = {
 
 export type SortByType = 'name' | 'discovery-newest' | 'discovery-oldest';
 
-export const SortBarContext = createContext<SortBarContextType | undefined>(undefined);
+const SortBarContext = createContext<SortBarContextType | undefined>(undefined);
 
 export const SortBarProvider = ({ children }: { children: ReactNode }) => {
     const [sortBy, setSortBy] = useState<SortByType>('name');
@@ -19,6 +19,7 @@ export const SortBarProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSortBar = () => {
     const context = useContext(SortBarContext);
     if (!context) {

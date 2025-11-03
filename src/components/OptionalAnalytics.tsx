@@ -7,12 +7,12 @@ try {
     Analytics = React.lazy(() =>
         import('@vercel/analytics/react').then((mod) => ({ default: mod.Analytics }))
     );
-} catch (err) {
+} catch (_err) {
     // Leave Analytics as null if import fails
     Analytics = null;
 }
 
-export const OptionalAnalytics = () => {
+export const OptionalAnalytics = (): React.ReactNode => {
     if (!Analytics) return null;
 
     return (

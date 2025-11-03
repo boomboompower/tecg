@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import {ReactNode} from 'react';
 
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 
@@ -36,7 +36,7 @@ export function Alert({children, id, className, dismissible}: AlertProps) {
         >
             {dismissible && (
                 <button
-                    className="absolute top-2 right-4 text-white hover:text-white/60"
+                    className="absolute top-2 right-4 text-white cursor-pointer hover:text-white/60"
                     title={'Dismiss alert'}
                     onClick={() => {
                         localStorage.setItem(btoa(id), 'dismissed');

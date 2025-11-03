@@ -1,5 +1,5 @@
 import './index.css'
-import React from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HolidaySeasons } from './components/HolidaySeasons';
 import { OptionalAnalytics } from './components/OptionalAnalytics';
@@ -9,9 +9,8 @@ import { SortBarProvider } from './contexts/SortBarProvider';
 import { HomePage } from './pages/HomePage';
 import { PageNotFound } from './pages/PageNotFound';
 
-// This is the main entry point for the application.
-function App() : React.ReactElement  {
-    return (
+createRoot(document.getElementById('root')!).render(
+    <StrictMode>
         <HolidaySeasons>
             <PageNotFound>
                 <ExperimentOverridesProvider>
@@ -23,14 +22,6 @@ function App() : React.ReactElement  {
                 </ExperimentOverridesProvider>
             </PageNotFound>
         </HolidaySeasons>
-    );
-}
-
-const domNode = document.getElementById('root');
-const root = createRoot(domNode);
-root.render(
-    <React.StrictMode>
-        <App />
         <OptionalAnalytics />
-    </React.StrictMode>
-);
+    </StrictMode>,
+)

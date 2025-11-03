@@ -17,12 +17,32 @@ jobs:
     if: github.repository == 'boomboompower/tecg' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
         with:
-          always-auth: false
+          version: 9  # or specify your version
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
           node-version: 24.x
-          cache: npm
+          cache: 'pnpm'
 
       - name: Git Credentials
         shell: bash
@@ -30,16 +50,18 @@ jobs:
           git config --global user.name 'github-bot'
           git config --global user.email '6031226+github-bot@users.noreply.github.com'
 
-      - run: npm install
-      - run: npm run build --if-present
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm run build --if-present
         env:
           EXPERIMENTS_URL: ${{ secrets.EXPERIMENTS_URL }}
           EXPERIMENTS_DATA_URL: ${{ secrets.EXPERIMENTS_DATA_URL }}
           # If a workflow dispatch, and the message is 'force', then force update
           FORCE_UPDATE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.message == 'force' && 'true' || 'false' }}
 
-      - run: npm run build-step-2 --if-present
-      - run: npm run build-step-3-extended --if-present
+      - run: pnpm run build-step-2 --if-present
+      - run: pnpm run build-step-3-extended --if-present
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_USERNAME: 'boomboompower'

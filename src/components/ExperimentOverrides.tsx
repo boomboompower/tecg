@@ -34,7 +34,7 @@ export function ExperimentOverrides({experiment, isLuckyLast}: ExperimentOverrid
             });
         }
         return groups;
-    }, [experiment.groups, experiment.staffOverride, overrides, experiment.name]);
+    }, [experiment.groups, experiment.staffOverride, experiment.name]);
 
     // Memoize the default group based on the experiment's default or the largest group
     // This ensures that we only recompute the default group when it changes (e.g., when the experiment's default or groups change)

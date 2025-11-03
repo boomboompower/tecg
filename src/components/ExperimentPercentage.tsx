@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface ExperimentPercentageProps {
     unusedCount: number;
     totalCount: number;

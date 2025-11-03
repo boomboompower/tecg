@@ -67,6 +67,7 @@ export const ExperimentOverridesProvider = ({ children }: { children: ReactNode 
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useExperimentOverrides = (): ExperimentOverridesContextType => {
     const context = useContext(ExperimentOverridesContext);
     if (!context) {

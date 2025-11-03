@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "allowJs": true,
-    "module": "commonjs",
+    "module": "esnext",
     "jsx": "react-jsx",
     "noImplicitAny": true,
     "removeComments": true,
@@ -11,17 +11,25 @@
     "esModuleInterop": true,
     "declaration": true,
     "sourceMap": true,
-    "target": "ES2017",
+    "target": "ES2022",
     "lib": [
       "dom",
       "dom.iterable",
-      "es2017"
+      "es2022"
+    ],
+
+    "strict": true,
+    "moduleResolution": "bundler",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "erasableSyntaxOnly": true,
+    "noUncheckedSideEffectImports": true,
+
+    "typeRoots": [
+      "./src/types/",
     ]
   },
-  "typeRoots": [
-    "./src/types/index.d.ts",
-    "./src/types/downloader.d.ts"
-  ],
   "include": [
     "./src/**/*"
   ],

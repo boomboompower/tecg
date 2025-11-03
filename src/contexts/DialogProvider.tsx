@@ -18,7 +18,7 @@ const DialogContext = createContext<DialogContextProps | undefined>(undefined);
 
 export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [dialogContent, setDialogContent] = useState<DialogContent>(null);
+    const [dialogContent, setDialogContent] = useState<DialogContent | null>(null);
 
     const closeDialog = () => {
         setIsDialogOpen(false);
@@ -49,12 +49,12 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
                     <DialogPanel
                         transition
-                        className={`${panelClasses} max-h-[90vh] overflow-y-auto rounded-xl bg-white/5 p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0`}
+                        className={`${panelClasses} max-h-[90vh] overflow-y-auto rounded-xl bg-white/5 p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0 z-20`}
                     >
                         <DialogTitle as="h3" className="text-lg font-semibold text-white">
                             {dialogContent?.title}
                             <button
-                                className="absolute top-4 right-4 text-gray-400 hover:text-gray-200"
+                                className="absolute top-4 right-4 text-gray-400 hover:text-gray-200 cursor-pointer"
                                 onClick={closeDialog}
                             >
                                 &times;
@@ -73,6 +73,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useDialogProvider = () => {
     const context = useContext(DialogContext);
     if (!context) {

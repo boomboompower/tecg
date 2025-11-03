@@ -1,3 +1,7 @@
+// Performance: Cache Intl.DateTimeFormat instances to avoid recreating them multiple times.
+// See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
+const cachedFormatter = new Map<string, Intl.DateTimeFormat>();
+
 /**
  * Format a date into a human-readable string. By default, it uses the local timezone.
  * If a timezone is provided, it will format the date accordingly. (Using en-GB locale)
@@ -8,22 +12,14 @@
  *
  * @return string - The formatted date string, or 'Unknown' if the date is falsy.
  */
-export function formatDate(date: string | number, timezone: string | undefined = undefined): string {
+export function formatDate(date: string | number | null | undefined, timezone: string | undefined = undefined): string {
     if (!date) return 'Unknown';
 
     try {
-        const options: Intl.DateTimeFormatOptions = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-            timeZoneName: 'short'
-        };
+        let timeZone = 'en-GB';
 
         // If a timezone is provided, use it, or else we want to use the local timezone
-        if (timezone) options.timeZone = timezone;
+        if (timezone) timeZone = timezone;
 
         const formattedDate = new Date(date)
 
@@ -32,7 +28,22 @@ export function formatDate(date: string | number, timezone: string | undefined =
             return 'before June 15, 2022';
         }
 
-        return formattedDate.toLocaleString('en-GB', options);
+        let formatter = cachedFormatter.get(timeZone);
+        if (!formatter) {
+            formatter = new Intl.DateTimeFormat('en-GB', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true,
+                timeZone: timeZone,
+                timeZoneName: 'short'
+            });
+            cachedFormatter.set(timeZone, formatter);
+        }
+
+        return formatter.format(formattedDate);
     } catch (e) {
         console.error('Error formatting date:', e);
     }

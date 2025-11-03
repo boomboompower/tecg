@@ -1,5 +1,6 @@
 import '../index.css';
-import {Footer} from './Footer';
+import { lazy } from 'react';
+const FooterLazy = lazy(() => import('../components/Footer'));
 
 export function NotFound() {
     return (
@@ -16,7 +17,7 @@ export function NotFound() {
                     Go to Home
                 </a>
             </div>
-            <Footer />
+            <FooterLazy />
         </div>
     );
 }

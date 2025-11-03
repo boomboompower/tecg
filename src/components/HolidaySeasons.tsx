@@ -41,16 +41,12 @@ export function HolidaySeasons(data: HolidaySeasonsProps) : React.ReactElement {
         }
     })
 
-    if (!currentSeason) {
-        return data.children
-    }
-
     useEffect(() => {
         // Check for reduced motion preference
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         // If the user prefers reduced motion, don't show the snowflakes
-        if (prefersReducedMotion) {
+        if (prefersReducedMotion || !currentSeason) {
             return;
         }
 
@@ -69,7 +65,11 @@ export function HolidaySeasons(data: HolidaySeasonsProps) : React.ReactElement {
         }));
 
         setSnowflakes(generatedFlakes);
-    }, []);
+    }, [currentSeason]);
+
+    if (!currentSeason) {
+        return data.children
+    }
 
     return (
         <>
