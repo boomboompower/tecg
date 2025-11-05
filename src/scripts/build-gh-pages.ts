@@ -59,7 +59,6 @@ async function buildPage() {
         log.info('Running gh-pages command...');
 
         await publish(resolve('./build'), {
-            repo: `https://${process.env.GH_TOKEN}@github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}.git`,
             message: message,
             branch: 'gh-pages',
             dotfiles: false,
