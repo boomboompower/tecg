@@ -69,6 +69,39 @@ jobs:
           GH_USERNAME: 'boomboompower'
           GH_REPO: 'tecg'
 
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet ./src/data/latest_build.json; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in latest_build.json"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in latest_build.json"
+          fi
+
+      - name: Read the commit message from the commit.txt file
+        id: get_commit_message
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          if [ -f "./src/data/commit.txt" ]; then
+            {
+              echo 'commit_message<<EOF'
+              cat ./src/data/commit.txt
+              echo EOF
+            } >> $GITHUB_OUTPUT
+          else
+            echo "commit_message=Update data file" >> $GITHUB_OUTPUT
+          fi
+
+      # Update latest_build.json with the commit message or else a default message
+      - name: Push changes to previousHash.txt
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git add ./src/data/latest_build.json
+          git commit -m "${{ steps.get_commit_message.outputs.commit_message || 'Update latest_build.json' }}"
+          git push origin HEAD:main
+
       - name: Done
         run: |
           echo Goodbye!
