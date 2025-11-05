@@ -52,15 +52,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - run: pnpm run build --if-present
+      - run: pnpm run build
         env:
           EXPERIMENTS_URL: ${{ secrets.EXPERIMENTS_URL }}
           EXPERIMENTS_DATA_URL: ${{ secrets.EXPERIMENTS_DATA_URL }}
           # If a workflow dispatch, and the message is 'force', then force update
           FORCE_UPDATE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.message == 'force' && 'true' || 'false' }}
 
-      - run: pnpm run build-step-2 --if-present
-      - run: pnpm run build-step-3-extended --if-present
+      - run: pnpm run build-step-2
+      - run: pnpm run build-step-3-extended
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_USERNAME: 'boomboompower'
