@@ -85,13 +85,15 @@ jobs:
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           if [ -f "./src/data/commit.txt" ]; then
+            # Use proper GitHub Actions multiline output format
             {
               echo 'commit_message<<EOF'
               cat ./src/data/commit.txt
-              echo EOF
-            } >> $GITHUB_OUTPUT
+              echo ''
+              echo 'EOF'
+            } >> "$GITHUB_OUTPUT"
           else
-            echo "commit_message=Update data file" >> $GITHUB_OUTPUT
+            echo "commit_message=Update data file" >> "$GITHUB_OUTPUT"
           fi
 
       # Update latest_build.json with the commit message or else a default message
