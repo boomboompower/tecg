@@ -3,9 +3,11 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite'
 
 const isProd = process.env.VERCEL_ENV === 'production';
+const isGitHub = process.env.RUN_ENV === 'github';
 
 // Vite configuration
 export default defineConfig({
+    base: isGitHub ? '/tecg/' : '/',
     plugins: [
         react(),
         tailwindcss(),

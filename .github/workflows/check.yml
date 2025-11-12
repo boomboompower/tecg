@@ -61,6 +61,7 @@ jobs:
           EXPERIMENTS_DATA_URL: ${{ secrets.EXPERIMENTS_DATA_URL }}
           # If a workflow dispatch, and the message is 'force', then force update
           FORCE_UPDATE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.message == 'force' && 'true' || 'false' }}
+          RUN_ENV: 'github'
 
       - run: pnpm run build-step-2
       - run: pnpm run build-step-3-extended
