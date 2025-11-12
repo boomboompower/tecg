@@ -47,8 +47,17 @@ export const Pill = React.forwardRef<HTMLSpanElement, PillProps>(
 Pill.displayName = 'Pill';
 
 function clsx(...classes: Array<string | Record<string, boolean> | undefined>): string {
-    return Object.entries(classes)
-        .filter(([_, value]) => value)
-        .map(([key, _]) => key)
+    // Proper implementation of clsx utility, where we override based on attributes
+    return classes
+        .flatMap(cls => {
+            if (typeof cls === 'string') {
+                return cls;
+            } else if (typeof cls === 'object' && cls !== null) {
+                return Object.entries(cls)
+                    .filter(([_, value]) => value)
+                    .map(([key, _]) => key);
+            }
+            return [];
+        })
         .join(' ');
 }
