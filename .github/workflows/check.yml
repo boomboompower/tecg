@@ -55,16 +55,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - run: pnpm run build
+      - name: Perform Pre-Build Data Fetch
+        run: pnpm run build
         env:
           EXPERIMENTS_URL: ${{ secrets.EXPERIMENTS_URL }}
           EXPERIMENTS_DATA_URL: ${{ secrets.EXPERIMENTS_DATA_URL }}
           # If a workflow dispatch, and the message is 'force', then force update
           FORCE_UPDATE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.message == 'force' && 'true' || 'false' }}
+
+      - name: Build Vite App
+        run: pnpm run build-step-2
+        env:
+          # Tell vite to deploy under /tecg/ base path
           RUN_ENV: 'github'
 
-      - run: pnpm run build-step-2
-      - run: pnpm run build-step-3-extended
+      - name: Deploy to GitHub Pages
+        run: pnpm run build-step-3-extended
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_USERNAME: 'boomboompower'
