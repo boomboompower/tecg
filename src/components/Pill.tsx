@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 
 interface PillProps {
     label: string;
@@ -46,3 +45,10 @@ export const Pill = React.forwardRef<HTMLSpanElement, PillProps>(
 );
 
 Pill.displayName = 'Pill';
+
+function clsx(...classes: Array<string | Record<string, boolean> | undefined>): string {
+    return Object.entries(classes)
+        .filter(([_, value]) => value)
+        .map(([key, _]) => key)
+        .join(' ');
+}
