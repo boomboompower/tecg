@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, startTransition } from 'react';
 import { TabGroup as HeadlessTabGroup, TabList, TabPanels, TabPanel, Tab } from '@headlessui/react';
 import { Experiment } from './Experiment';
 import { SortBar } from './SortBar';
@@ -56,7 +56,9 @@ export function TabGroup() {
 
     return (
         <HeadlessTabGroup selectedIndex={selectedIndex} onChange={(index) => {
-            setSelectedIndex(index);
+            startTransition(() => {
+                setSelectedIndex(index);
+            });
         }}>
             <SortBar totalCount={totalExperiments} />
 
@@ -64,23 +66,32 @@ export function TabGroup() {
 
             {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
             {/* @ts-ignore tablist is a valid role. */}
-            <TabList className="lg:flex gap-4 grid grid-cols-3" aria-label="Experiment tabs" role="tablist">
+            <TabList className="lg:flex gap-3 grid grid-cols-3" aria-label="Experiment tabs" role="tablist">
                 {totalExperiments > 0 && tabData.map(({name, count, description}, index) => (
                     <Tab
                         key={name}
                         aria-label={`Select ${name} experiments`}
                         title={description}
-                        className={`rounded-full px-3 py-1 text-sm font-semibold text-white ${selectedIndex === index ? 'bg-[#404955]' : 'bg-[#2a3441]'}`}
+                        className={`rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 ${
+                            selectedIndex === index
+                                ? 'bg-[#404955] shadow-md shadow-black/10 border border-white/10 scale-[1.02]'
+                                : 'bg-[#2a3441] cursor-pointer hover:bg-[#343d4c] hover:shadow-sm hover:scale-[1.01] border border-transparent'
+                        }`}
                     >
-                        {name}<span className='text-xs'> ({count}/{totalExperiments})</span>
+                        {name}<span className='text-xs opacity-75'> ({count}/{totalExperiments})</span>
                     </Tab>
                 ))}
             </TabList>
             <TabPanels>
                 <TabPanel static>
-                    <div className="mt-3 mb-5 gap-4 mx-auto w-full divide-y divide-white/5 rounded-md stack">
+                    <div className="mt-3 mb-5 gap-4 mx-auto w-full divide-y divide-white/5 rounded-xl stack shadow-lg shadow-black/20 border border-white/5" style={{contain: 'layout style paint'}}>
                         {sortedTabExperiments.map((exp, index) => (
-                            <Experiment key={exp.name} experiment={exp} isLuckyLast={index === sortedTabExperiments.length - 1} />
+                            <Experiment
+                                key={exp.id}
+                                experiment={exp}
+                                isLuckyLast={index === sortedTabExperiments.length - 1}
+                                isFirst={index === 0}
+                            />
                         ))}
                     </div>
                 </TabPanel>

@@ -39,19 +39,19 @@ export function ActionBar() {
     }
 
     return (
-        <div className="w-full flex gap-2 justify-center flex-col mb-2 lg:w-auto">
+        <div className="w-full flex gap-3 justify-center flex-col mb-2 lg:w-auto">
             <Button
                 aria-label={'Import an override from clipboard'}
                 title={'Import overrides from clipboard. This will paste the overrides from your clipboard.'}
                 onClick={openImportDialog}
-                className={'w-full bg-tw text-white text-sm font-semibold py-1 px-3 rounded-md transition cursor-pointer disabled:text-white/50 disabled:cursor-default'}>
+                className={'w-full bg-tw text-white text-sm font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 cursor-pointer disabled:text-white/50 disabled:cursor-default hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border border-transparent hover:border-white/10 disabled:hover:scale-[1.0]'}>
                 Import
             </Button>
             <Button
                 aria-label={'Export overrides to clipboard'}
                 title={'Export overrides to clipboard. This will copy the current overrides to your clipboard.'}
                 onClick={openExportDialog}
-                className="w-full bg-export text-white text-sm font-semibold py-1 px-3 rounded-md transition cursor-pointer disabled:text-white/50 disabled:cursor-default">
+                className="w-full bg-export text-white text-sm font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 cursor-pointer disabled:text-white/50 disabled:cursor-default hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border border-transparent hover:border-white/10 disabled:hover:scale-[1.0]">
                 Export
             </Button>
             <Button
@@ -59,7 +59,7 @@ export function ActionBar() {
                 title={overrideCount > 0 ? 'Reset all overrides to default' : 'No overrides to reset'}
                 disabled={overrideCount === 0}
                 onClick={openResetDialog}
-                className="w-full bg-reset text-white text-sm font-semibold py-1 px-3 rounded-md transition cursor-pointer disabled:text-white/50 disabled:cursor-default">
+                className="w-full bg-reset text-white text-sm font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 cursor-pointer disabled:text-white/50 disabled:cursor-default disabled:opacity-50 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border border-transparent hover:border-white/10 disabled:hover:scale-[1.0]">
                 {overrideCount > 0 ? 'Reset' : 'No Overrides'}
             </Button>
         </div>
@@ -74,12 +74,12 @@ function ImportDialog() {
     return (
         <div>
             <Textarea
-                className="w-full mt-2 p-2 border rounded-md h-48 resize-none bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full mt-2 p-3 border border-gray-700 rounded-lg h-48 resize-none bg-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 shadow-inner"
                 placeholder="{%22experiments%22:{}%2C%22disabled%22:[]}"
                 id={'cookie-input'}
             />
             <Button
-                className="mt-3 w-full bg-blue text-white px-4 py-2 rounded-md"
+                className="mt-3 w-full bg-blue text-white px-4 py-2.5 rounded-lg hover:shadow-md transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
                 onClick={(event) => {
                     const input = document.getElementById('cookie-input') as HTMLTextAreaElement;
                     const cookie = input.value;
@@ -126,12 +126,12 @@ function ExportDialog({ closeDialog }: { closeDialog: () => void }) {
     return (
         <div>
             <Textarea
-                className="w-full mt-2 p-2 border rounded-md h-48 resize-none bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full mt-2 p-3 border border-gray-700 rounded-lg h-48 resize-none bg-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 shadow-inner"
                 readOnly
                 value={cookie}
             />
             <Button
-                className="w-full mt-3 bg-blue text-white px-4 py-2 rounded-md"
+                className="w-full mt-3 bg-blue text-white px-4 py-2.5 rounded-lg hover:shadow-md transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
                 onClick={(event) => {
                     navigator.clipboard.writeText(cookie).then(() => {
                         console.log('Copied to clipboard');
@@ -172,7 +172,7 @@ function ResetDialog() {
                 </ul>
             )}
             <Button
-                className={'mt-3 w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 float-end'}
+                className={'mt-3 w-full bg-red-500 text-white px-4 py-2.5 rounded-lg hover:bg-red-600 hover:shadow-md transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-red-500/50 float-end'}
                 onClick={(e) => {
                     clearOverrides();
 

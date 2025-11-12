@@ -1,6 +1,6 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 
 // Components
 import {ExperimentOverrides} from './ExperimentOverrides';
@@ -17,6 +17,7 @@ import {formatDate} from '../utils/formatDate';
 interface ExperimentProps {
     experiment: CollatedExperiment;
     isLuckyLast?: boolean;
+    isFirst?: boolean;
 }
 
 function getExperimentDateText(experiment: CollatedExperiment) {
@@ -41,8 +42,9 @@ function getExperimentDateText(experiment: CollatedExperiment) {
  *
  * @param experiment {@link CollatedExperiment} experiment - The experiment to display
  * @param isLuckyLast {boolean} - Whether the experiment is a lucky last experiment
+ * @param isFirst {boolean} - Whether the experiment is the first in the list
  */
-export function Experiment({ experiment, isLuckyLast }: ExperimentProps) {
+const ExperimentComponent = ({ experiment, isLuckyLast, isFirst }: ExperimentProps) => {
     const { overrides } = useExperimentOverrides();
     const prettyName = useMemo(() => prettifyName(experiment.name), [experiment.name]);
     const experimentDateText = useMemo(() => getExperimentDateText(experiment), [experiment]);
@@ -51,29 +53,45 @@ export function Experiment({ experiment, isLuckyLast }: ExperimentProps) {
         <Disclosure as="div" key={experiment.name}>
             {({ open }) => (
                 <>
-                    <DisclosureButton className="gap-5 text-left group grid grid-cols-4 w-full items-center justify-end">
-                        <div className="col-span-3 w-full text-lg font-semibold text-white p-3 justify-self-start">
-                            <div>
+                    <DisclosureButton as="div" className={`cursor-pointer gap-5 text-left group grid grid-cols-4 w-full items-center justify-end transition-all duration-200 hover:bg-white/5 active:bg-white/10 ${isFirst ? 'rounded-t-xl' : ''}`}>
+                        <div className="col-span-3 w-full p-4 justify-self-start">
+                            <div className="flex items-center gap-1">
                                 <InfoTooltip
                                     experiment={experiment}
                                     override={overrides[experiment.name]}
                                     prettyName={prettyName}
                                 />
-                                <span>{prettyName}</span>
+                                <span className="text-lg font-semibold text-white tracking-tight">{prettyName}</span>
                             </div>
-                            <div className="mt-1 text-xs text-gray-500">
-                                <div>{experimentDateText}</div>
+                            <div className="mt-1 space-y-1">
+                                {experiment.description?.description && (
+                                    <div className={`text-[11px] italic text-gray-400/100 leading-relaxed ${!open ? 'line-clamp-1' : ''}`}>
+                                        {experiment.description.description}
+                                    </div>
+                                )}
+                                <div className="text-xs text-gray-400 font-medium">{experimentDateText}</div>
                             </div>
                         </div>
-                        <div className='justify-self-end mr-2'>
-                            <ChevronDownIcon className={`size-5 fill-white/60 transition-transform duration-200 ease-in-out group-hover:fill-white/50 ${open ? 'rotate-180' : ''}`} />
+                        <div className='justify-self-end mr-4'>
+                            <ChevronDownIcon className={`size-5 fill-white/60 transition-all duration-300 ease-out group-hover:fill-white/80 group-hover:scale-110 ${open ? 'rotate-180' : ''}`} />
                         </div>
                     </DisclosureButton>
-                    <DisclosurePanel as='div' transition className={`overflow-hidden transition-all duration-500 ease-in-out ${open ? 'opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <DisclosurePanel as='div' unmount transition className={`overflow-hidden transition-all duration-300 ease-in-out ${open ? 'opacity-100' : 'max-h-0 opacity-0'}`}>
                         <ExperimentOverrides experiment={experiment} isLuckyLast={isLuckyLast} />
                     </DisclosurePanel>
                 </>
             )}
         </Disclosure>
     );
-}
+};
+
+// Memoize the component to prevent unnecessary re-renders
+// Only re-render if experiment.id, isLuckyLast, or isFirst changes
+export const Experiment = memo(ExperimentComponent, (prevProps, nextProps) => {
+    return (
+        prevProps.experiment.id === nextProps.experiment.id &&
+        prevProps.isLuckyLast === nextProps.isLuckyLast &&
+        prevProps.isFirst === nextProps.isFirst &&
+        prevProps.experiment.name === nextProps.experiment.name
+    );
+});

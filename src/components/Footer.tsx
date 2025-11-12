@@ -42,14 +42,14 @@ export function Footer() {
     }
 
     return (
-        <footer className="bg-gray-900 text-gray-400 py-8 px-4 mt-4 md:px-16 text-xs md:text-base">
+        <footer className="bg-gray-900/80 backdrop-blur-sm text-gray-400 py-10 px-4 mt-8 md:px-16 text-xs md:text-base border-t border-gray-800 shadow-2xl shadow-black/50">
             <div className="max-w-7xl mx-auto">
-                <div className="space-y-4">
-                    <h2 className="flex items-baseline gap-2 text-2xl font-bold text-white">
+                <div className="space-y-5">
+                    <h2 className="flex items-baseline gap-3 text-2xl font-bold text-white">
                         <span>About TECG - Stream Service Experiment Cookie Generator</span>
-                        <span className="text-gray-500 hover:text-gray-300 cursor-pointer" title="Debug">
+                        <span className="text-gray-500 hover:text-gray-300 transition-colors duration-200" title="Debug">
                             <span className="sr-only">Debug</span>
-                            <button onClick={() => openDebugDialog() } className="align-middle cursor-pointer" >
+                            <button onClick={() => openDebugDialog() } className="align-middle cursor-pointer hover:scale-110 transition-transform duration-200" >
                                 <CodeBracketSquareIcon className={'w-5 h-5 size-5'} />
                             </button>
                         </span>
@@ -81,9 +81,7 @@ export function Footer() {
                         respective owners.</p>
 
                     <div className='text-center text-xs md:text-sm'>
-                        <div>&copy; {new Date().getFullYear()} &#x2022; Open-source under the MIT
-                            License
-                        </div>
+                        <div>&copy; {new Date().getFullYear()} &#x2022; Open-source under the MIT License</div>
                         <div><span>Designed by </span>
                             <a href='https://github.com/boomboompower/tecg/' target='_blank'
                                rel='noopener noreferrer'>
@@ -158,7 +156,7 @@ function DebugDialog() {
                 </pre>
             </div>
             <Button
-                className={'mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 float-end'}
+                className={'cursor-pointer mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 float-end'}
                 onClick={closeDialog}
             >
                 Close

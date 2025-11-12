@@ -41,15 +41,15 @@ export function ExperimentPercentage({ unusedCount, totalCount }: ExperimentPerc
                 : 'text-green-500';
 
     return (
-        <div className="flex items-center gap-1 mb-2 mx-0 lg:gap-2" aria-label={'Experiment bloat percentage'} role={'banner'}>
-            <span className="text-sm text-gray-400">
-                Bloat Percentage:
+        <div className="flex items-baseline gap-2 mb-3 mx-0 lg:gap-2.5 bg-gray-800/30 px-4 py-2.5 rounded-lg border border-gray-700/30" aria-label={'Experiment bloat percentage'} role={'banner'}>
+            <span className="text-sm text-gray-400 font-medium">
+                Bloat:
             </span>
-            <span className={`text-sm md:text-lg font-semibold ${textColor}`}>
+            <span className={`text-lg md:text-xl font-bold ${textColor} drop-shadow-sm`}>
                 {bloatPercentage.toFixed(1)}%
             </span>
-            <span className="text-sm text-gray-400">
-                ({unusedCount} of {totalCount} experiments unused)
+            <span className="text-xs text-gray-500">
+                ({unusedCount}/{totalCount} unused)
             </span>
         </div>
     );

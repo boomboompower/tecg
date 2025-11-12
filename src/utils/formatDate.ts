@@ -1,6 +1,7 @@
 // Performance: Cache Intl.DateTimeFormat instances to avoid recreating them multiple times.
 // See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
 const cachedFormatter = new Map<string, Intl.DateTimeFormat>();
+const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 /**
  * Format a date into a human-readable string. By default, it uses the local timezone.
@@ -16,10 +17,10 @@ export function formatDate(date: string | number | null | undefined, timezone: s
     if (!date) return 'Unknown';
 
     try {
-        let timeZone = 'en-GB';
+        let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         // If a timezone is provided, use it, or else we want to use the local timezone
-        if (timezone) timeZone = timezone;
+        if (timezone) timeZone = userTimeZone;
 
         const formattedDate = new Date(date)
 
@@ -37,8 +38,6 @@ export function formatDate(date: string | number | null | undefined, timezone: s
                 hour: 'numeric',
                 minute: 'numeric',
                 hour12: true,
-                timeZone: timeZone,
-                timeZoneName: 'short'
             });
             cachedFormatter.set(timeZone, formatter);
         }

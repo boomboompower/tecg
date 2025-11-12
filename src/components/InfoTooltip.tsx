@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, memo } from 'react';
 import { InformationCircleIcon } from '@heroicons/react/20/solid';
 import { useDialogProvider } from '../contexts/DialogProvider';
 import { CollatedExperiment } from '../hooks/useExperiments';
@@ -20,62 +20,87 @@ function DialogContent({ experiment }: { experiment: CollatedExperiment }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
                 <div className="flex items-center">
                     <div className="font-semibold">ID:</div>
-                    <div className="ml-2">{experiment.id}</div>
+                    <div className="text-gray-300 text-sm leading-relaxed ml-2">{experiment.id}</div>
                 </div>
                 <div className="flex items-center">
                     <div className="font-semibold">Name:</div>
-                    <div className="ml-2">{experiment.name}</div>
+                    <div className="text-gray-300 text-sm leading-relaxed ml-2">{experiment.name}</div>
                 </div>
                 <div className="flex items-center">
                     <div className="font-semibold">Active:</div>
-                    <div className={`ml-2 ${experiment.active ? 'text-green-500' : 'text-red-500'}`}>
+                    <div className={`text-sm leading-relaxed ml-2 ${experiment.active ? 'text-green-500' : 'text-red-500'}`}>
                         {experiment.active ? 'Yes' : 'No'}
                     </div>
                 </div>
                 <div className="flex items-center">
                     <div className="font-semibold">Has Been Active:</div>
-                    <div className={`ml-2 ${experiment.hasBeenActive ? 'text-green-500' : 'text-red-500'}`}>
+                    <div className={`text-sm leading-relaxed ml-2 ${experiment.hasBeenActive ? 'text-green-500' : 'text-red-500'}`}>
                         {experiment.hasBeenActive ? 'Yes' : 'No'}
                     </div>
                 </div>
                 <div className="flex items-center">
                     <div className="font-semibold">Serving One:</div>
-                    <div className={`ml-2 ${experiment.servingOne ? 'text-green-500' : 'text-red-500'}`}>
+                    <div className={`text-sm leading-relaxed ml-2 ${experiment.servingOne ? 'text-green-500' : 'text-red-500'}`}>
                         {experiment.servingOne ? 'Yes' : 'No'}
                     </div>
                 </div>
                 <div className="flex items-center">
                     <div className="font-semibold">Default Group:</div>
-                    <div className="ml-2"><Pill label={experiment.default} className={'ml-0'} /></div>
+                    <div className="text-gray-300 text-sm leading-relaxed ml-2"><Pill label={experiment.default} className={'ml-0'} /></div>
                 </div>
                 <div className="flex items-center">
                     <div className="font-semibold">Date Found:</div>
-                    <div className="ml-2">{experiment.dateFound ? new Date(experiment.dateFound).toLocaleString() : 'N/A'}</div>
+                    <div className="text-gray-300 text-sm leading-relaxed ml-2">{experiment.dateFound ? new Date(experiment.dateFound).toLocaleString(undefined, {timeZoneName: 'short'}) : 'N/A'}</div>
                 </div>
                 {experiment.dateActivated && (
                     <div className="flex items-center">
                         <div className="font-semibold">Date Activated:</div>
-                        <div className="ml-2">{new Date(experiment.dateActivated).toLocaleString()}</div>
+                        <div className="text-gray-300 text-sm leading-relaxed ml-2">{new Date(experiment.dateActivated).toLocaleString(undefined, {timeZoneName: 'short'})}</div>
                     </div>
                 )}
                 {experiment.dateDeactivated && (
                     <div className="flex items-center">
                         <div className="font-semibold">Date Deactivated:</div>
-                        <div className="ml-2">{new Date(experiment.dateDeactivated).toLocaleString()}</div>
+                        <div className="text-gray-300 text-sm leading-relaxed ml-2">{new Date(experiment.dateDeactivated).toLocaleString(undefined, {timeZoneName: 'short'})}</div>
                     </div>
                 )}
                 {experiment.staffOverride && (
                     <div className="flex items-center">
                         <div className="font-semibold">Staff Override:</div>
-                        <div className="ml-2">{experiment.staffOverride}</div>
+                        <div className="text-gray-300 text-sm leading-relaxed ml-2">{experiment.staffOverride}</div>
                     </div>
                 )}
             </div>
+            {experiment.description && (
+                <>
+                    <hr className="border-gray-700 my-2 col-span-2" />
+                    <div className="mt-4">
+                        <div className="font-semibold text-lg mb-2">Description</div>
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                            {experiment.description.description}
+                        </p>
+
+                        {experiment.description.variantExplanations && Object.keys(experiment.description.variantExplanations).length > 0 && (
+                            <div className="mt-4">
+                                <div className="font-semibold mb-2">Variant Explanations</div>
+                                <div className="space-y-2">
+                                    {Object.entries(experiment.description.variantExplanations).map(([variant, explanation]) => (
+                                        <div key={variant} className="text-sm">
+                                            <span className="font-medium text-blue-400">{variant}:</span>
+                                            <span className="text-gray-300 ml-2">{explanation}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </>
+            )}
         </>
     )
 }
 
-export function InfoTooltip({experiment, override, prettyName}: InfoTooltipProps) {
+const InfoTooltipComponent = ({experiment, override, prettyName}: InfoTooltipProps) => {
     const {openDialogue, closeDialog} = useDialogProvider();
 
     function onExperimentClick(event: MouseEvent) {
@@ -126,4 +151,13 @@ export function InfoTooltip({experiment, override, prettyName}: InfoTooltipProps
             />
         </div>
     );
-}
+};
+
+// Memoize to prevent re-renders
+export const InfoTooltip = memo(InfoTooltipComponent, (prevProps, nextProps) => {
+    return (
+        prevProps.experiment.id === nextProps.experiment.id &&
+        prevProps.override === nextProps.override &&
+        prevProps.prettyName === nextProps.prettyName
+    );
+});

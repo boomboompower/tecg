@@ -11,13 +11,13 @@ const ActionBarLazy = lazy(() => import('../components/ActionBar'));
 export function HomePage() {
     return (
         <div className="h-screen w-full m-auto justify-center">
-            <div className="w-full m-auto max-w-4xl px-4 pt-8 z-10">
-                <header aria-label={'TECG - Experiment Cookie Generator'}>
-                    <h1 className="text-3xl font-bold text-white">
-                        <span className='block sm:hidden text-xl'>TECG - Experiment Cookie Generator</span>
-                        <span
-                            className='hidden sm:block text-2xl'>TECG - Streaming Service Experiment Cookie Generator</span>
+            <div className="w-full m-auto max-w-4xl px-4 pt-10 z-10">
+                <header aria-label={'TECG - Experiment Cookie Generator'} className="mb-6">
+                    <h1 className="text-3xl font-bold text-white tracking-tight">
+                        <span className='block sm:hidden text-2xl bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent'>TECG - Experiment Cookie Generator</span>
+                        <span className='hidden sm:block text-3xl bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent'>TECG - Streaming Service Experiment Cookie Generator</span>
                     </h1>
+                    <p className="mt-2 text-sm text-gray-400">Manage and customize experiment configurations</p>
                 </header>
 
                 <AlertLazy className='my-3 hidden lg:block' dismissible>

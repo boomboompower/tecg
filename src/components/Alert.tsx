@@ -28,7 +28,7 @@ export function Alert({children, id, className, dismissible}: AlertProps) {
 
     return (
         <div
-            className={`rounded-md bg-red-700 text-white p-4 relative ${className}`}
+            className={`rounded-xl bg-red-700/90 border border-red-600/30 text-white p-5 relative shadow-lg shadow-red-900/20 backdrop-blur-sm ${className}`}
             aria-label={'Alert'}
             aria-describedby={id}
             role="alert"
@@ -36,7 +36,7 @@ export function Alert({children, id, className, dismissible}: AlertProps) {
         >
             {dismissible && (
                 <button
-                    className="absolute top-2 right-4 text-white cursor-pointer hover:text-white/60"
+                    className="absolute top-3 right-4 text-white/80 cursor-pointer hover:text-white transition-all duration-200 text-2xl leading-none hover:scale-110"
                     title={'Dismiss alert'}
                     onClick={() => {
                         localStorage.setItem(btoa(id), 'dismissed');
@@ -49,11 +49,11 @@ export function Alert({children, id, className, dismissible}: AlertProps) {
                     &times;
                 </button>
             )}
-            <div className="flex ">
-                <div className="flex-shrink-0 self-center">
-                    <ExclamationTriangleIcon className='size-6 text-yellow-400'/>
+            <div className="flex gap-3">
+                <div className="flex-shrink-0 self-start pt-0.5">
+                    <ExclamationTriangleIcon className='size-6 text-yellow-300 drop-shadow-sm'/>
                 </div>
-                <div className="ml-3">
+                <div className="flex-1 space-y-1">
                     {children}
                 </div>
             </div>

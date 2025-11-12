@@ -19,10 +19,11 @@ import experimentsImport from '../data/experiments.json';
  * - dateActivated: The date the experiment was activated.
  * - dateDeactivated: The date the experiment was deactivated.
  * - staffOverride: An optional field that indicates if there is a staff override for the experiment.
+ * - description: An optional field containing AI-generated descriptions of the experiment and its variants.
  */
 export type CollatedExperiment = {
     id: string,                    // For example: "e2a55f6e-0226-41c2-8320-a1a4abf7c611"
-    name: string,                  // For example: "twitch-experiment"
+    name: string,                  // For example: "my-experiment"
     groups: {
         value: string,             // For example: "control"
         weight: number,            // For example: 0.5
@@ -35,6 +36,11 @@ export type CollatedExperiment = {
     dateActivated?: string,        // The date the experiment was added
     dateDeactivated?: string,      // The date the experiment was removed
     staffOverride?: string,        // For example: "control",
+    description?: {
+        description: string,       // AI-generated description of what the experiment does
+        variantExplanations: Record<string, string>, // Explanations for each variant
+        generatedAt: string,       // ISO timestamp of when the description was generated
+    },
 }
 
 /**
