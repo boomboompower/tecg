@@ -1,15 +1,24 @@
 {
-  "buildId": "1fa76cc0-bed5-4064-9c06-5f391c4d48d4",
-  "updatedAt": 1762824114386,
-  "experimentsCount": 60,
+  "buildId": "2b185530-4d87-4427-882d-a7bd15f8f555",
+  "updatedAt": 1762997705690,
+  "experimentsCount": 59,
   "shorthand": {
     "added": 0,
-    "removed": 0,
+    "removed": 1,
     "activated": 0,
-    "deactivated": 0,
+    "deactivated": 1,
     "modified": 0
   },
   "comments": [
-    "No changes in experiments detected."
+    "0 experiments were added, 1 experiments were removed.",
+    "Removed experiments:",
+    "- c86b522c-2b6c-40d6-97c2-c8912d1f8763 (disco_bpli)",
+    "  * control (100)",
+    "  * variant1 (0)",
+    "0 experiments were activated, 1 experiments were deactivated.",
+    "Deactivated experiments:",
+    "- c86b522c-2b6c-40d6-97c2-c8912d1f8763 (disco_bpli)",
+    "  * control (100)",
+    "  * variant1 (0)"
   ]
 }
