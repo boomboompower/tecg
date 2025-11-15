@@ -26,6 +26,10 @@ importers:
       react-dom:
         specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)
+    optionalDependencies:
+      '@vercel/analytics':
+        specifier: ^1.5.0
+        version: 1.5.0(react@19.2.0)
     devDependencies:
       '@types/gh-pages':
         specifier: ^6.1.0
@@ -93,10 +97,6 @@ importers:
       vite-css-modules:
         specifier: ^1.11.1
         version: 1.11.1(lightningcss@1.30.2)(postcss@8.5.6)(rollup@4.52.5)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.43.1)(tsx@4.20.6)(yaml@2.8.0))
-    optionalDependencies:
-      '@vercel/analytics':
-        specifier: ^1.5.0
-        version: 1.5.0(react@19.2.0)
 
 packages:
 
