@@ -166,6 +166,25 @@ function hasNewBuild(newestBuild: string, newestTime: number, storedData: Stored
         buildData.comments.push('No changes detected in experiments.');
     }
 
+    // Check if the old build comments exists, and if it matches the new one then assume no changes
+    // Do not use JSON.stringify here, as the order of comments may change
+    // This is to prevent commits where the only change is the update time or build ID or where comments are reordered.
+    // Unfortunately, this also means the build data will not be updated next time, so I'd like to rework this in the future.
+    if (previousBuildInfo && previousBuildInfo.comments.length === buildData.comments.length) {
+        let commentsMatch = true;
+        for (let i = 0; i < buildData.comments.length; i++) {
+            if (previousBuildInfo.comments[i] !== buildData.comments[i]) {
+                commentsMatch = false;
+                break;
+            }
+        }
+
+        if (commentsMatch) {
+            log.warn('No changes detected in experiments comments, nothing to update.');
+            return;
+        }
+    }
+
     // Write all our data to the files
     writeFileSync(EXPERIMENTS_DATA, JSON.stringify(experiments, null, 2), {encoding: 'utf8'});
 
