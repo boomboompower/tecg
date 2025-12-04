@@ -98,6 +98,7 @@ function hasNewBuild(newestBuild: string, newestTime: number, storedData: Stored
     const prodExpURL = process.env.EXPERIMENTS_URL;
     const prodExpDataURL = process.env.EXPERIMENTS_DATA_URL;
     const forceUpdate = process.env.FORCE_UPDATE && process.env.FORCE_UPDATE === 'true';
+    const isGitHubRunEnv = process.env.RUN_ENV && process.env.RUN_ENV === 'github';
 
     if (!prodExpURL) {
         log.error('Cannot determine experiment source, EXPERIMENTS_URL are not set!');
@@ -170,7 +171,7 @@ function hasNewBuild(newestBuild: string, newestTime: number, storedData: Stored
     // Do not use JSON.stringify here, as the order of comments may change
     // This is to prevent commits where the only change is the update time or build ID or where comments are reordered.
     // Unfortunately, this also means the build data will not be updated next time, so I'd like to rework this in the future.
-    if (previousBuildInfo && previousBuildInfo.comments.length === buildData.comments.length) {
+    if (previousBuildInfo && isGitHubRunEnv && previousBuildInfo.comments.length === buildData.comments.length) {
         let commentsMatch = true;
         for (let i = 0; i < buildData.comments.length; i++) {
             if (previousBuildInfo.comments[i] !== buildData.comments[i]) {
