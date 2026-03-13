@@ -1,7 +1,7 @@
 {
-  "buildId": "fcdcd72e-45b2-4aa4-88b6-55ea912b0672",
-  "updatedAt": 1773109322696,
-  "experimentsCount": 23,
+  "buildId": "6bb9169e-4974-452f-9d68-c7ca125684f7",
+  "updatedAt": 1773400345317,
+  "experimentsCount": 22,
   "shorthand": {
     "added": 0,
     "removed": 1,
@@ -12,13 +12,17 @@
   "comments": [
     "0 experiments were added, 1 experiments were removed.",
     "Removed experiments:",
-    "- 99bdab4c-f5cf-490c-bbf8-4fdcab252811 (web_disco_hamster_switch)",
-    "  * control (0)",
-    "  * active (100)",
+    "- b7fc3072-7594-42d5-8ffe-8c7dcb27247b (gifter-badge-exp)",
+    "  * control (100)",
+    "  * treatment1 (0)",
+    "  * treatment2 (0)",
+    "  * treatment3 (0)",
     "0 experiments were activated, 1 experiments were deactivated.",
     "Deactivated experiments:",
-    "- 99bdab4c-f5cf-490c-bbf8-4fdcab252811 (web_disco_hamster_switch)",
-    "  * control (0)",
-    "  * active (100)"
+    "- b7fc3072-7594-42d5-8ffe-8c7dcb27247b (gifter-badge-exp)",
+    "  * control (100)",
+    "  * treatment1 (0)",
+    "  * treatment2 (0)",
+    "  * treatment3 (0)"
   ]
 }
